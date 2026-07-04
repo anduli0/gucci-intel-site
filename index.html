@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Gucci Intelligence</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='11' fill='%23175e3d'/%3E%3Crect y='11' width='32' height='10' fill='%23a91622'/%3E%3Crect y='21' width='32' height='11' fill='%23175e3d'/%3E%3C/svg%3E">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
 <link rel="apple-touch-icon" href="icon-180.png">
 <link rel="manifest" href="manifest.webmanifest">
 <meta name="theme-color" content="#0f0e0c">
@@ -221,8 +222,6 @@ button.ghost{background:none;border:1px solid var(--line);color:var(--ink-dim);b
 @keyframes pulse{50%{opacity:.3}}
 #runlog{background:#0a0908;border:1px solid var(--line);border-radius:10px;padding:14px;font-family:Consolas,monospace;font-size:11.5px;color:#b9b19e;white-space:pre-wrap;max-height:46vh;overflow-y:auto;line-height:1.6}
 .note{font-size:12px;color:var(--ink-dim);line-height:1.8;margin-top:12px}
-body.ro #tab-run{display:none}
-body.ro .empty .go{display:none}
 body.ro .robadge{display:inline-block}
 .robadge{display:none;font-size:10.5px;border:1px solid var(--gold-dim);color:var(--gold-dim);border-radius:5px;padding:1px 8px;letter-spacing:.15em;margin-left:4px;vertical-align:2px}
 @media (max-width:980px){ .cards,.gcards,.prevs,.runbtns{grid-template-columns:1fr 1fr} .grid2,.rep,.newscols{grid-template-columns:1fr} }
@@ -329,6 +328,11 @@ body.ro .robadge{display:inline-block}
 <section id="view-guide" class="hidden"><div id="guideBody"></div></section>
 
 <section id="view-run" class="hidden">
+  <div id="engineOff" class="authbar hidden"></div>
+  <div id="keyRow" class="evrow hidden">
+    <input id="runKeyInput" type="password" autocomplete="off">
+    <button class="act" onclick="saveKey()" id="btnKeySave"></button>
+  </div>
   <div id="authBar" class="authbar hidden"></div>
   <div class="runbtns" id="runBtns"></div>
   <div class="evrow">
@@ -412,6 +416,9 @@ const STR = {
              ['gucci-products','제품 스캔','카테고리별 HOT·트렌드·신제품·스테디·베스트 제품 보드 갱신 (이미지+마케팅 분석)']],
     cmds:{'daily-gucci':'데일리 구찌','daily-brief':'데일리 브리프','weekly-luxury':'위클리 럭셔리','event-response':'이벤트 대응','news-scrap':'뉴스 스크랩','gucci-special':'스페셜 심층분석','gucci-products':'제품 스캔'},
     evPh:'이벤트명 입력 (예: 밀라노 2027 크루즈쇼) — 패션쇼·신제품 출시가 최우선', btnFlash:'플래시 리포트', btnSpecial:'스페셜 심층분석',
+    keyPh:'실행 키 입력 (엔진 원격 제어용)', keySave:'키 저장', keySaved:'실행 키 저장됨 — 이제 버튼으로 파이프라인을 돌릴 수 있음.', keyBad:'실행 키 불일치 — 키를 다시 입력.',
+    engineOff:'엔진 오프라인 — 파이프라인을 돌리는 컴퓨터가 꺼져 있거나 연결이 안 됨. 컴퓨터가 켜지면 이 화면에서 바로 실행 가능하며, 열람은 지금도 가능함.',
+    runnoteRemote:'실행 명령은 엔진 컴퓨터의 Claude가 수행함. 완료되면 이 사이트도 자동 갱신됨(1~2분 지연).',
     confirm:(c,a)=>`${c}${a?' — '+a:''} 파이프라인을 실행할까? 자동으로 웹 수집과 리포트 발행까지 진행되며 수십 분 걸릴 수 있음.`,
     go:'실행', cancel:'취소', idle:'대기 중', running:(c,s)=>`${c} 실행 중 — ${s} 시작`, done:(c,e)=>`${c} 종료 (코드 ${e}) — 완료 후 리포트 탭 확인`,
     hdrRunning:'파이프라인 실행 중', hdrAuth:'인증 필요', evNeed:'이벤트명을 입력', already:'이미 실행 중: ', started:' 시작됨 — 로그가 아래 표시됨.', failed:'실행 실패: ',
@@ -468,6 +475,9 @@ const STR = {
              ['gucci-products','Product Scan','Rebuild the per-category HOT/trend/new/steady/best product board (imagery + marketing reads)']],
     cmds:{'daily-gucci':'Daily Gucci','daily-brief':'Daily Brief','weekly-luxury':'Weekly Luxury','event-response':'Event Response','news-scrap':'News Scrap','gucci-special':'Special Deep-Dive','gucci-products':'Product Scan'},
     evPh:'Event name (e.g. Milan Cruise 2027 show) — fashion shows & launches are top priority', btnFlash:'Flash Report', btnSpecial:'Special Deep-Dive',
+    keyPh:'Enter run key (remote engine control)', keySave:'Save key', keySaved:'Run key saved — pipeline buttons are now live.', keyBad:'Invalid run key — please re-enter.',
+    engineOff:'Engine offline — the computer that runs the pipelines is off or unreachable. Viewing still works; running resumes when it comes back online.',
+    runnoteRemote:'Run commands execute on the engine computer via Claude. This site auto-refreshes when a run completes (1-2 min delay).',
     confirm:(c,a)=>`Run the ${c}${a?' — '+a:''} pipeline? It will collect from the web and publish reports automatically; may take tens of minutes.`,
     go:'Run', cancel:'Cancel', idle:'Idle', running:(c,s)=>`${c} running — started ${s}`, done:(c,e)=>`${c} finished (exit ${e}) — check the Reports tab`,
     hdrRunning:'Pipeline running', hdrAuth:'Auth needed', evNeed:'Enter an event name', already:'Already running: ', started:' started — log below.', failed:'Launch failed: ',
@@ -496,6 +506,7 @@ function applyChrome(){
   $('sovTitle').textContent=t().sov; $('mixTitle').textContent=t().mix; $('prevTitle').textContent=t().prev;
   $('dashEmpty').innerHTML=t().dashEmpty+`<br><span class="go" onclick="showTab('run')">${t().goRun}</span>`;
   $('evName').placeholder=t().evPh; $('btnFlash').textContent=t().btnFlash; $('btnSpecial').textContent=t().btnSpecial;
+  $('runKeyInput').placeholder=t().keyPh; $('btnKeySave').textContent=t().keySave;
   $('btnGo').textContent=t().go; $('btnCancel').textContent=t().cancel;
   $('authBar').innerHTML=t().authBar;
   if(!$('runlog').textContent.trim()) $('runlog').textContent=t().logPh;
@@ -522,6 +533,23 @@ function showTab(tb){
 }
 // relative fetches so the app works both at / (local) and under /gucci/ (public funnel)
 async function jget(u){ const r=await fetch(u.replace(/^\//,'')); return r.json(); }
+// Run control can target the always-on engine (Tailscale funnel) from the
+// static GitHub Pages viewer. Guarded by a run key the server verifies.
+const REMOTE_BASE='https://krw-watcher.tail3e31a9.ts.net/gucci/';
+let RB=''; // '' = same origin; switched to REMOTE_BASE on the static site
+async function fetchRun(path, opts){
+  opts=opts||{};
+  const key=localStorage.getItem('gi-key')||'';
+  opts.headers=Object.assign({}, opts.headers||{}, key?{'X-Run-Key':key}:{});
+  const r=await fetch(RB+path, opts);
+  return r.json();
+}
+function saveKey(){
+  const v=$('runKeyInput').value.trim();
+  if(!v) return;
+  localStorage.setItem('gi-key', v); $('runKeyInput').value='';
+  notify(t().keySaved); pollRun();
+}
 // One report = one file (KO first, EN after the marker); the CLIENT picks the
 // language, so the same code works on the live server and on static hosting.
 async function getReport(p){
@@ -1072,9 +1100,11 @@ function notify(msg){
   clearTimeout(noticeTimer); noticeTimer=setTimeout(()=>n.classList.add('hidden'), 6000);
 }
 async function runCmd(cmd,arg){
-  const st=await jget('/api/status');
+  let st=null;
+  try{ st=await fetchRun('api/status'); }catch(e){ notify(t().engineOff); return; }
   if(!st.claude_available){ notify(t().noClaude); return; }
   if(st.running){ notify(t().already+(t().cmds[st.cmd]||st.cmd)); return; }
+  if(st.key_required && !localStorage.getItem('gi-key')){ $('keyRow').classList.remove('hidden'); notify(t().keyBad); return; }
   pendingRun={cmd,arg:arg||''};
   $('confirmMsg').textContent=t().confirm(t().cmds[cmd]||cmd, arg||'');
   $('confirmBar').classList.remove('hidden');
@@ -1083,9 +1113,14 @@ function cancelRun(){ pendingRun=null; $('confirmBar').classList.add('hidden'); 
 async function confirmRun(){
   if(!pendingRun) return;
   const {cmd,arg}=pendingRun; cancelRun();
-  const r=await fetch('api/run',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({cmd,arg})});
-  const d=await r.json();
-  if(d.error) notify(t().failed+d.error); else notify((t().cmds[cmd]||cmd)+t().started);
+  let d=null;
+  try{
+    d=await fetchRun('api/run',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({cmd,arg})});
+  }catch(e){ notify(t().engineOff); return; }
+  if(d.error){
+    if((d.error+'').includes('key')){ localStorage.removeItem('gi-key'); $('keyRow').classList.remove('hidden'); notify(t().keyBad); }
+    else notify(t().failed+d.error);
+  } else notify((t().cmds[cmd]||cmd)+t().started);
   pollRun();
 }
 function runEvent(cmd){
@@ -1095,14 +1130,24 @@ function runEvent(cmd){
 }
 async function pollRun(){
   clearTimeout(pollTimer);
-  const st=await jget('/api/status');
-  if(st.ui_mtime){ if(uiMtime===null) uiMtime=st.ui_mtime; else if(st.ui_mtime!==uiMtime) location.reload(); }
-  if(st.readonly){
-    document.body.classList.add('ro');
-    if(curTab==='run') showTab('dash');
-    pollTimer=setTimeout(pollRun, 60000);
+  let st=null;
+  try{ st=await fetchRun('api/status'); }catch(e){ st=null; }
+  if(st && st.static){  // baked snapshot (GitHub Pages) → control the engine remotely
+    RB=REMOTE_BASE;
+    try{ st=await fetchRun('api/status'); }catch(e){ st=null; }
+  }
+  if(!st){  // engine unreachable (PC off) — viewing still works
+    $('engineOff').innerHTML=t().engineOff; $('engineOff').classList.remove('hidden');
+    $('keyRow').classList.add('hidden');
+    $('runstate').classList.remove('running');
+    $('runtext').textContent=t().idle; $('hdrStatus').textContent='';
+    pollTimer=setTimeout(pollRun, 30000);
     return;
   }
+  $('engineOff').classList.add('hidden');
+  if(RB==='' && st.ui_mtime){ if(uiMtime===null) uiMtime=st.ui_mtime; else if(st.ui_mtime!==uiMtime) location.reload(); }
+  document.body.classList.toggle('ro', !!st.readonly);
+  $('keyRow').classList.toggle('hidden', !(st.key_required && !localStorage.getItem('gi-key')));
   const el=$('runstate');
   el.classList.toggle('running', st.running);
   if(st.running){
@@ -1116,9 +1161,11 @@ async function pollRun(){
   }
   $('authBar').classList.toggle('hidden', !st.auth_error);
   if(st.auth_error) $('hdrStatus').textContent=t().hdrAuth;
-  $('runnote').textContent = st.claude_available ? t().runnoteOk : t().runnoteNo;
-  const lg=await jget('/api/runlog');
-  if(lg.lines.length){ const box=$('runlog'); box.textContent=lg.lines.join('\n'); box.scrollTop=box.scrollHeight; }
+  $('runnote').textContent = st.claude_available ? (st.key_required ? t().runnoteRemote : t().runnoteOk) : t().runnoteNo;
+  try{
+    const lg=await fetchRun('api/runlog');
+    if(lg.lines && lg.lines.length){ const box=$('runlog'); box.textContent=lg.lines.join('\n'); box.scrollTop=box.scrollHeight; }
+  }catch(e){}
   pollTimer=setTimeout(pollRun, st.running?4000:15000);
 }
 function refreshAll(){ loadDash(); if(curTab==='rep')loadReports(); if(curTab==='sp')loadSpecial(); if(curTab==='news')loadNews(); if(curTab==='lux')loadLux(); if(curTab==='ev')loadEvents(); if(curTab==='prod')loadProd(); if(curTab==='cal')loadCal(); if(curTab==='amb')loadAmb(); if(curTab==='guide')renderGuide(); pollRun(); }
