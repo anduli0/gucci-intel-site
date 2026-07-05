@@ -191,6 +191,8 @@ table.gt th{background:var(--panel2);color:var(--gold);font-weight:500}
 .replist .repdate:not(:first-child){margin-top:10px}
 .replist .repdate .arr{display:inline-block;width:14px;color:var(--gold-dim);font-size:10px}
 .replist .repdate .cnt{float:right;color:var(--ink-dim);font-size:10.5px;font-weight:400;background:var(--panel2);border:1px solid var(--line);border-radius:9px;padding:1px 7px}
+.sechead{font-size:14px;color:var(--gold);letter-spacing:.08em;font-weight:600;border-bottom:1px solid var(--line);padding-bottom:7px;margin-bottom:4px}
+.secnote{font-size:12px;color:var(--ink-dim);margin-bottom:12px}
 .replist .item{padding:9px 10px 9px 16px;border-radius:7px;cursor:pointer;margin-bottom:2px;text-align:left}
 .replist .item:hover{background:var(--panel2)}
 .replist .item.on{background:var(--panel2);border-left:2px solid var(--gold)}
@@ -272,7 +274,6 @@ body.ro .robadge{display:inline-block}
   <button id="tab-sp" onclick="showTab('sp')"></button>
   <button id="tab-news" onclick="showTab('news')"></button>
   <button id="tab-lux" onclick="showTab('lux')"></button>
-  <button id="tab-ev" onclick="showTab('ev')"></button>
   <button id="tab-prod" onclick="showTab('prod')"></button>
   <button id="tab-cal" onclick="showTab('cal')"></button>
   <button id="tab-amb" onclick="showTab('amb')"></button>
@@ -312,7 +313,6 @@ body.ro .robadge{display:inline-block}
   <div id="luxBody"></div>
 </section>
 
-<section id="view-ev" class="hidden"><div id="evBody"></div></section>
 
 <section id="view-prod" class="hidden">
   <div class="luxgroups" id="prodCats"></div>
@@ -375,7 +375,9 @@ let curTab='dash', pollTimer=null, curReport=null, luxData=null, luxSel=null, ui
 
 const STR = {
   ko: {
-    refresh:'새로고침', tabs:{dash:'대시보드',sp:'스페셜',news:'뉴스',lux:'럭셔리 워치',ev:'이벤트',prod:'제품',cal:'캘린더',amb:'앰배서더',rep:'데일리 리포트',guide:'지수 가이드',run:'실행'},
+    refresh:'새로고침', tabs:{dash:'대시보드',sp:'스페셜·이벤트',news:'뉴스',lux:'럭셔리 워치',prod:'제품',cal:'캘린더',amb:'앰배서더',rep:'데일리 리포트',guide:'지수 가이드',run:'실행'},
+    spSecSpecial:'스페셜 심층 리포트', spSecSpecialNote:'패션쇼·핵심 이슈를 한 편의 전문 분석으로 — 최소 3일에 한 번 발행 보장',
+    spSecEvents:'이벤트 플래시 대응', spSecEventsNote:'진행 중인 이벤트를 체크포인트(T+2h, T+24h…)별로 실시간 추적한 속보 리포트',
     prodEmpty:'제품 분석 데이터가 아직 없음<br>실행 탭의 제품 스캔을 돌리면 카테고리별 HOT·트렌드·신제품·스테디·베스트 보드가 여기 채워짐',
     prodHead:(d)=>`${d} 기준 · 라벨은 보도·판매 근거 기반`, prodLabels:{hot:'HOT',trend:'트렌드',new:'신제품',steady:'스테디셀러',best:'베스트셀러'},
     prodEvPre:'근거 — ', prodPage:'제품 페이지', prodImgNone:'이미지 미확보',
@@ -404,7 +406,7 @@ const STR = {
     newsEmpty:'아직 뉴스 스크랩이 없음<br>실행 탭의 뉴스 스크랩을 돌리면 구찌 10건 + 럭셔리 10건이 매일 여기 쌓임',
     luxEmpty:'럭셔리 워치 데이터가 아직 없음<br>데일리 브리프 또는 위클리 럭셔리를 실행하면 업계 동향이 여기 쌓임',
     luxNone:'이 그룹의 신규 신호 없음', luxAsof:' 수집분', gucciView:'구찌 관점 — ',
-    groups:{'Kering':'케링','LVMH':'LVMH','Hermes-Chanel':'에르메스·샤넬','Jewelry':'주얼리','Beauty':'뷰티'},
+    groups:{'Kering':'케링','LVMH':'LVMH','Hermes-Chanel':'에르메스·샤넬','Jewelry':'주얼리','Beauty':'뷰티','Independents':'인디펜던트'},
     tags:{'competitive threat':'경쟁 위협','benchmark opportunity':'벤치마크 기회','category trend':'카테고리 트렌드','unrelated':'참고'},
     evEmpty:'이벤트 대응 기록이 없음<br>쇼·런칭·논란이 터지면 실행 탭에서 이벤트명을 넣고 돌리면 시점별 추적이 여기 쌓임',
     calEmpty:'캘린더 데이터가 아직 없음<br>데일리 브리프를 실행하면 다가오는 패션쇼·실적발표·출시 일정이 여기 쌓임',
@@ -436,7 +438,9 @@ const STR = {
     poolFail:'소스풀을 불러오지 못함', poolComp:'경쟁사 세트', poolWatch:'업계 감시망', loading:'불러오는 중'
   },
   en: {
-    refresh:'Refresh', tabs:{dash:'Dashboard',sp:'Special',news:'News',lux:'Luxury Watch',ev:'Events',prod:'Products',cal:'Calendar',amb:'Ambassadors',rep:'Daily Reports',guide:'Index Guide',run:'Run'},
+    refresh:'Refresh', tabs:{dash:'Dashboard',sp:'Special & Events',news:'News',lux:'Luxury Watch',prod:'Products',cal:'Calendar',amb:'Ambassadors',rep:'Daily Reports',guide:'Index Guide',run:'Run'},
+    spSecSpecial:'Special Deep-Dive Reports', spSecSpecialNote:'Flagship expert analysis of shows and defining issues — published at least once every 3 days',
+    spSecEvents:'Event Flash Response', spSecEventsNote:'Live event tracking by checkpoint (T+2h, T+24h…) — rapid-reaction reports',
     prodEmpty:'No product analysis yet<br>Run Product Scan from the Run tab to fill the per-category HOT / trend / new / steady / best board',
     prodHead:(d)=>`as of ${d} · labels are evidence-based`, prodLabels:{hot:'HOT',trend:'TREND',new:'NEW',steady:'STEADY',best:'BEST'},
     prodEvPre:'Evidence — ', prodPage:'Product page', prodImgNone:'No image',
@@ -465,7 +469,7 @@ const STR = {
     newsEmpty:'No news scrap yet<br>Run News Scrap from the Run tab — 10 Gucci + 10 luxury items land here daily',
     luxEmpty:'No luxury watch data yet<br>Run Daily Brief or Weekly Luxury to fill industry signals here',
     luxNone:'No new signals in this group', luxAsof:' collected', gucciView:'Gucci angle — ',
-    groups:{'Kering':'Kering','LVMH':'LVMH','Hermes-Chanel':'Hermès·Chanel','Jewelry':'Jewelry','Beauty':'Beauty'},
+    groups:{'Kering':'Kering','LVMH':'LVMH','Hermes-Chanel':'Hermès·Chanel','Jewelry':'Jewelry','Beauty':'Beauty','Independents':'Independents'},
     tags:{'competitive threat':'competitive threat','benchmark opportunity':'benchmark opportunity','category trend':'category trend','unrelated':'note'},
     evEmpty:'No event-response records<br>When a show, launch or controversy breaks, run it from the Run tab to track checkpoints here',
     calEmpty:'No calendar data yet<br>Run Daily Brief to fill upcoming shows, earnings and launches here',
@@ -508,7 +512,7 @@ function applyChrome(){
   $('lang-ko').classList.toggle('on', LANG==='ko');
   $('lang-en').classList.toggle('on', LANG==='en');
   $('btnRefresh').textContent=t().refresh;
-  for(const k of ['dash','sp','news','lux','ev','prod','cal','amb','rep','guide','run']) $('tab-'+k).textContent=t().tabs[k];
+  for(const k of ['dash','sp','news','lux','prod','cal','amb','rep','guide','run']) $('tab-'+k).textContent=t().tabs[k];
   $('gmaiNote').textContent=t().gmaiNote;
   $('footOwner').innerHTML=t().footOwner;
   $('trigTitle').textContent=t().trig; $('chartTitle').textContent=t().chart; $('gapTitle').textContent=t().gap;
@@ -525,7 +529,7 @@ function applyChrome(){
 }
 function showTab(tb){
   curTab=tb;
-  for(const x of ['dash','sp','news','lux','ev','prod','cal','amb','rep','guide','run']){
+  for(const x of ['dash','sp','news','lux','prod','cal','amb','rep','guide','run']){
     $('view-'+x).classList.toggle('hidden', x!==tb);
     $('tab-'+x).classList.toggle('on', x===tb);
   }
@@ -533,7 +537,6 @@ function showTab(tb){
   if(tb==='sp') loadSpecial();
   if(tb==='news') loadNews();
   if(tb==='lux') loadLux();
-  if(tb==='ev') loadEvents();
   if(tb==='prod') loadProd();
   if(tb==='cal') loadCal();
   if(tb==='amb') loadAmb();
@@ -732,7 +735,7 @@ async function loadPrevs(){
 }
 function openFromDash(p){
   if(p.startsWith('special/')){ showTab('sp'); openDoc(p,'spBody',loadSpecial); }
-  else if(p.startsWith('events/')){ showTab('ev'); openDoc(p,'evBody',loadEvents); }
+  else if(p.startsWith('events/')){ showTab('sp'); openDoc(p,'spBody',loadSpecial); }
   else { showTab('rep'); openReport(p); }
 }
 async function openDoc(path, bodyId, backFn){
@@ -870,20 +873,28 @@ async function loadAmb(){
     }).join('');
 }
 
-/* ---------- special ---------- */
+/* ---------- special + events (merged desk) ---------- */
 async function loadSpecial(){
-  const d = await jget('/api/reports');
-  const sp = d.reports.filter(r=>r.category==='special');
-  if(!sp.length){
-    $('spBody').innerHTML=`<div class="empty">${t().spEmpty}<br><span class="go" onclick="showTab('run')">${t().goRun}</span></div>`;
-    return;
-  }
-  $('spBody').innerHTML = sp.map(r=>
+  const [rd, ed] = await Promise.all([jget('/api/reports'), jget('/api/events')]);
+  const sp = rd.reports.filter(r=>r.category==='special');
+  const spHtml = sp.length ? sp.map(r=>
     `<div class="spitem" onclick="openFromDash('${r.path}')">
       <div class="cat">${t().spCat}</div>
       <div class="ttl">${esc(r.name)}</div>
-      <div class="tm">${r.mtime}</div></div>`).join('');
+      <div class="tm">${r.mtime}</div></div>`).join('')
+    : `<div class="empty">${t().spEmpty}<br><span class="go" onclick="showTab('run')">${t().goRun}</span></div>`;
+  const evHtml = (ed.events||[]).length ? ed.events.map(ev=>
+    `<div class="evcard"><div class="eid">${esc(ev.event_id)}</div>`+
+    ev.checkpoints.map(c=>
+      `<div class="cp"><span class="cpn">${esc(c.checkpoint)}</span><span class="tm">${c.mtime}</span>`+
+      (c.report?`<span class="open" onclick="openFromDash('${c.report}')">${t().openRep}</span>`:`<span class="open" style="color:var(--ink-dim);cursor:default">${t().noRep}</span>`)+
+      `</div>`).join('')+`</div>`).join('')
+    : `<div class="empty">${t().evEmpty}</div>`;
+  $('spBody').innerHTML =
+    `<div class="sechead">${t().spSecSpecial}</div><div class="secnote">${t().spSecSpecialNote}</div>`+spHtml+
+    `<div class="sechead" style="margin-top:26px">${t().spSecEvents}</div><div class="secnote">${t().spSecEventsNote}</div>`+evHtml;
 }
+function loadEvents(){ return loadSpecial(); }
 
 /* ---------- news ---------- */
 function pickL(it, ko, en){ return LANG==='en' ? (it[en]||it[ko]||'') : (it[ko]||it[en]||''); }
@@ -946,21 +957,6 @@ function renderLux(){
   }).join('');
 }
 
-/* ---------- events ---------- */
-async function loadEvents(){
-  const d = await jget('/api/events');
-  if(!d.events.length){
-    $('evBody').innerHTML=`<div class="empty">${t().evEmpty}<br><span class="go" onclick="showTab('run')">${t().goRun}</span></div>`;
-    return;
-  }
-  $('evBody').innerHTML = d.events.map(ev=>
-    `<div class="evcard"><div class="eid">${esc(ev.event_id)}</div>`+
-    ev.checkpoints.map(c=>
-      `<div class="cp"><span class="cpn">${esc(c.checkpoint)}</span><span class="tm">${c.mtime}</span>`+
-      (c.report?`<span class="open" onclick="openFromDash('${c.report}')">${t().openRep}</span>`:`<span class="open" style="color:var(--ink-dim);cursor:default">${t().noRep}</span>`)+
-      `</div>`).join('')+`</div>`).join('');
-}
-
 /* ---------- guide ---------- */
 async function renderGuide(){
   const G = LANG==='en' ? GUIDE_EN : GUIDE_KO;
@@ -979,8 +975,8 @@ const GUIDE_KO = `
   <div class="gnote">0~100 스케일. 매일 4개 권역(동북아·동남아·북미·유럽)의 뉴스와 여론을 수집해 네 가지 성분을 가중 합산. 같은 입력이면 언제나 같은 결과가 나오는 스크립트 계산 방식이라 사람이 손댈 수 없음. 패션쇼·신제품 출시는 전 데스크 공통 최우선 신호.</div></div>
 <div class="gcards">
   <div class="gcard"><div class="w">45%</div><div class="t">감성</div><div class="d">브랜드를 향한 태도. 디자인 호평, 구매 의사는 플러스. 품질 불만, 가격 인상 반발, 논란은 마이너스. 나쁜 화제로는 지수가 오르지 않게 설계.</div></div>
-  <div class="gcard"><div class="w">20%</div><div class="t">화제</div><div class="d">오늘의 언급량이 최근 30일 평균 대비 얼마나 튀는지. 기준선이 5일 이상 쌓이기 전에는 중립(50)으로 판단 유보.</div></div>
-  <div class="gcard"><div class="w">15%</div><div class="t">참여</div><div class="d">좋아요·댓글·공유가 도달 대비 얼마나 깊은지. 스쳐 가는 노출과 실제 반응을 구분.</div></div>
+  <div class="gcard"><div class="w">20%</div><div class="t">화제</div><div class="d">뉴스 + SNS + 커뮤니티를 합친 오늘의 언급량이 최근 30일 평균 대비 얼마나 튀는지(채널 신뢰 가중: 뉴스 1.0 · SNS 0.8 · 커뮤니티 0.6). 건수만 세며 좋아요·공유는 절대 반영하지 않음 — 그건 참여의 몫. 기준선이 5일 이상 쌓이기 전에는 중립(50)으로 판단 유보.</div></div>
+  <div class="gcard"><div class="w">15%</div><div class="t">참여</div><div class="d">좋아요·댓글·공유가 도달 대비 얼마나 깊은지 — 콘텐츠 한 건당 반응의 강도. 수치가 실제 보고된 게시물만 집계하며 건수는 절대 반영하지 않음(얼마나 많이는 화제의 몫). 수치 있는 게시물이 없으면 중립(50)으로 판단 유보.</div></div>
   <div class="gcard"><div class="w">20%</div><div class="t">점유</div><div class="d">루이비통·디올·샤넬·프라다·보테가·생로랑·발렌시아가 대비 구찌가 대화에서 차지하는 몫.</div></div>
 </div>
 <div class="grid2">
@@ -1018,8 +1014,8 @@ const GUIDE_EN = `
   <div class="gnote">0-100 scale. Every day the system collects news and public opinion across four region blocks (NE Asia, SE Asia, N. America, Europe) and combines four weighted components. Computed by a deterministic script — same inputs always give the same result; no human adjustment. Fashion shows and product launches are the top-priority signal across all desks.</div></div>
 <div class="gcards">
   <div class="gcard"><div class="w">45%</div><div class="t">Sentiment</div><div class="d">Attitude toward the brand. Design praise and purchase intent are positive; quality complaints, price-hike backlash and controversies are negative. Toxic buzz cannot inflate the index.</div></div>
-  <div class="gcard"><div class="w">20%</div><div class="t">Buzz</div><div class="d">How today's mention volume compares to the trailing 30-day baseline. Until 5+ baseline days accumulate, held neutral (50).</div></div>
-  <div class="gcard"><div class="w">15%</div><div class="t">Engagement</div><div class="d">How deep likes/comments/shares run relative to reach — separating passing impressions from real reactions.</div></div>
+  <div class="gcard"><div class="w">20%</div><div class="t">Buzz</div><div class="d">How today's mention volume across news + SNS + communities compares to the trailing 30-day baseline (channel reliability weights: news 1.0 · SNS 0.8 · community 0.6). Counts items only — likes/shares never enter Buzz (that's Engagement's job). Until 5+ baseline days accumulate, held neutral (50).</div></div>
+  <div class="gcard"><div class="w">15%</div><div class="t">Engagement</div><div class="d">How deep likes/comments/shares run relative to reach — reaction intensity PER piece of content. Aggregates only posts whose metrics are actually reported; item counts never enter Engagement (how-much is Buzz's job). Held neutral (50) when no metric-bearing posts exist.</div></div>
   <div class="gcard"><div class="w">20%</div><div class="t">SOV</div><div class="d">Gucci's share of conversation vs Louis Vuitton, Dior, Chanel, Prada, Bottega, Saint Laurent, Balenciaga.</div></div>
 </div>
 <div class="grid2">
@@ -1214,7 +1210,7 @@ async function pollRun(){
   }catch(e){}
   pollTimer=setTimeout(pollRun, st.running?4000:15000);
 }
-function refreshAll(){ loadDash(); if(curTab==='rep')loadReports(); if(curTab==='sp')loadSpecial(); if(curTab==='news')loadNews(); if(curTab==='lux')loadLux(); if(curTab==='ev')loadEvents(); if(curTab==='prod')loadProd(); if(curTab==='cal')loadCal(); if(curTab==='amb')loadAmb(); if(curTab==='guide')renderGuide(); pollRun(); }
+function refreshAll(){ loadDash(); if(curTab==='rep')loadReports(); if(curTab==='sp')loadSpecial(); if(curTab==='news')loadNews(); if(curTab==='lux')loadLux(); if(curTab==='prod')loadProd(); if(curTab==='cal')loadCal(); if(curTab==='amb')loadAmb(); if(curTab==='guide')renderGuide(); pollRun(); }
 applyChrome(); renderGuide(); loadDash(); pollRun();
 </script>
 </body>
