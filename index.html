@@ -186,7 +186,12 @@ table.gt th{background:var(--panel2);color:var(--gold);font-weight:500}
 /* reports */
 .rep{display:grid;grid-template-columns:300px 1fr;gap:14px;min-height:480px}
 .replist{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:8px;overflow-y:auto;max-height:72vh}
-.replist .item{padding:9px 10px;border-radius:7px;cursor:pointer;margin-bottom:2px}
+.replist .repdate{padding:10px 10px 6px;font-size:12px;color:var(--gold);letter-spacing:.08em;font-weight:600;border-bottom:1px solid var(--line);margin-bottom:4px;text-align:left;cursor:pointer;user-select:none}
+.replist .repdate:hover{background:var(--panel2)}
+.replist .repdate:not(:first-child){margin-top:10px}
+.replist .repdate .arr{display:inline-block;width:14px;color:var(--gold-dim);font-size:10px}
+.replist .repdate .cnt{float:right;color:var(--ink-dim);font-size:10.5px;font-weight:400;background:var(--panel2);border:1px solid var(--line);border-radius:9px;padding:1px 7px}
+.replist .item{padding:9px 10px 9px 16px;border-radius:7px;cursor:pointer;margin-bottom:2px;text-align:left}
 .replist .item:hover{background:var(--panel2)}
 .replist .item.on{background:var(--panel2);border-left:2px solid var(--gold)}
 .replist .cat{font-size:10px;color:var(--gold-dim);letter-spacing:.1em}
@@ -409,9 +414,11 @@ const STR = {
     ambHead:(d,n)=>`${d} 기준 · 최근 30일 · ${n}건 — 구찌 우선 정렬`, ambImpact:'임팩트 — ',
     openRep:'리포트 열기', noRep:'리포트 없음', pickRep:'왼쪽에서 리포트를 선택',
     cats:{special:'스페셜',daily:'데일리',weekly:'위클리',events:'이벤트'},
-    runDefs:[['news-scrap','뉴스 스크랩','구찌 10건 + 럭셔리 10건 오늘의 주요 뉴스 수집 (5~10분, 매일 08:40 자동)'],
-             ['daily-gucci','데일리 구찌','4개 권역 수집 → 감성 분류 → 지수 계산 → 비즈니스 리뷰 발행 (20~40분)'],
-             ['daily-brief','데일리 브리프','럭셔리 5개 그룹 감시 → 심층 해석 브리프 발행'],
+    repKinds:{'gucci-business-review':'비즈니스 리뷰','index-interpretation':'지수 해석','luxury-brief':'럭셔리 브리프','luxury-weekly':'위클리 트렌드'},
+    repMissing:'미발행',
+    runDefs:[['news-scrap','뉴스 스크랩','구찌 10건 + 럭셔리 10건 당일 주요 뉴스 수집 (5~10분, 매일 08:40 자동)'],
+             ['daily-gucci','데일리 구찌','4개 권역 수집 → 감성 분류 → 지수 계산 → 지수 해석 + 비즈니스 리뷰 발행 (20~40분)'],
+             ['daily-brief','데일리 브리프','럭셔리 6개 그룹(프라다 등 인디펜던트 포함) 당일 이슈 전수 감시 → 업계 종합 브리프 발행'],
              ['weekly-luxury','위클리 럭셔리','최근 7일 업계 전체 → 트렌드 구조 분석 리포트 발행'],
              ['gucci-products','제품 스캔','카테고리별 HOT·트렌드·신제품·스테디·베스트 제품 보드 갱신 (이미지+마케팅 분석)']],
     cmds:{'daily-gucci':'데일리 구찌','daily-brief':'데일리 브리프','weekly-luxury':'위클리 럭셔리','event-response':'이벤트 대응','news-scrap':'뉴스 스크랩','gucci-special':'스페셜 심층분석','gucci-products':'제품 스캔'},
@@ -468,9 +475,11 @@ const STR = {
     ambHead:(d,n)=>`as of ${d} · trailing 30 days · ${n} items — Gucci first`, ambImpact:'Impact — ',
     openRep:'Open report', noRep:'No report', pickRep:'Select a report on the left',
     cats:{special:'SPECIAL',daily:'DAILY',weekly:'WEEKLY',events:'EVENT'},
+    repKinds:{'gucci-business-review':'Business Review','index-interpretation':'Index Interpretation','luxury-brief':'Luxury Brief','luxury-weekly':'Weekly Trend'},
+    repMissing:'not published',
     runDefs:[['news-scrap','News Scrap','Collect today\'s 10 Gucci + 10 luxury headlines (5-10 min, auto daily 08:40)'],
-             ['daily-gucci','Daily Gucci','4-region collection → sentiment → GMAI index → business review (20-40 min)'],
-             ['daily-brief','Daily Brief','Watch 5 luxury groups → publish analytical brief'],
+             ['daily-gucci','Daily Gucci','4-region collection → sentiment → GMAI index → index interpretation + business review (20-40 min)'],
+             ['daily-brief','Daily Brief','Watch 6 luxury groups (incl. independents like Prada) for today\'s issues → publish industry-wide brief'],
              ['weekly-luxury','Weekly Luxury','Trailing 7 days industry-wide → trend structure report'],
              ['gucci-products','Product Scan','Rebuild the per-category HOT/trend/new/steady/best product board (imagery + marketing reads)']],
     cmds:{'daily-gucci':'Daily Gucci','daily-brief':'Daily Brief','weekly-luxury':'Weekly Luxury','event-response':'Event Response','news-scrap':'News Scrap','gucci-special':'Special Deep-Dive','gucci-products':'Product Scan'},
@@ -1045,14 +1054,51 @@ const GUIDE_EN = `
   <div class="gnote">Every figure carries a source link. Unverified claims are flagged; speculation is labeled. Reports that fail fact-check are not published. Detailed X/Instagram/TikTok metrics stay empty until data connectors are added — never fabricated.</div></div>`;
 
 /* ---------- reports ---------- */
+const REP_KIND_ORDER=['gucci-business-review','index-interpretation','luxury-brief'];
+let repCache=null, repOpen=null;
+function repKindOf(name){
+  const rest=name.replace(/^\d{4}-\d{2}-\d{2}-?/,'');
+  for(const k of Object.keys(t().repKinds)) if(rest===k||rest.endsWith(k)) return k;
+  return null;
+}
+function toggleRepDate(date){
+  if(!repOpen) return;
+  if(repOpen.has(date)) repOpen.delete(date); else repOpen.add(date);
+  renderRepList();
+}
+function renderRepList(){
+  const reps=repCache||[];
+  if(!reps.length){ $('replist').innerHTML=`<div class="empty">${t().noPrev}</div>`; return; }
+  // group by report date (filename prefix), newest date first
+  const groups={};
+  for(const r of reps){
+    const m=r.name.match(/^(\d{4}-\d{2}-\d{2})/);
+    const date=m?m[1]:(r.mtime||'').slice(0,10);
+    (groups[date]=groups[date]||[]).push(r);
+  }
+  const dates=Object.keys(groups).sort().reverse();
+  if(!repOpen) repOpen=new Set(dates.slice(0,1)); // latest date open by default
+  $('replist').innerHTML=dates.map(date=>{
+    const open=repOpen.has(date);
+    const items=groups[date].slice().sort((a,b)=>{
+      const ka=REP_KIND_ORDER.indexOf(repKindOf(a.name)), kb=REP_KIND_ORDER.indexOf(repKindOf(b.name));
+      return (ka<0?9:ka)-(kb<0?9:kb) || a.name.localeCompare(b.name);
+    });
+    const rows=open?items.map(r=>{
+      const kind=repKindOf(r.name);
+      const label=kind?t().repKinds[kind]:esc(r.name.replace(/^\d{4}-\d{2}-\d{2}-?/,''));
+      return `<div class="item ${curReport===r.path?'on':''}" onclick="openReport('${r.path}')">
+        <div class="cat">${t().cats[r.category]||r.category}</div>
+        <div class="nm">${label}</div><div class="tm">${r.mtime}</div></div>`;
+    }).join(''):'';
+    return `<div class="repdate ${open?'open':''}" onclick="toggleRepDate('${date}')">
+      <span class="arr">${open?'▾':'▸'}</span>${date}<span class="cnt">${items.length}</span></div>`+rows;
+  }).join('');
+}
 async function loadReports(){
   const d=await jget('/api/reports');
-  d.reports=d.reports.filter(r=>r.category==='daily'||r.category==='weekly');
-  if(!d.reports.length){ $('replist').innerHTML=`<div class="empty">${t().noPrev}</div>`; return; }
-  $('replist').innerHTML=d.reports.map(r=>
-    `<div class="item ${curReport===r.path?'on':''}" onclick="openReport('${r.path}')">
-       <div class="cat">${t().cats[r.category]||r.category}</div>
-       <div class="nm">${esc(r.name)}</div><div class="tm">${r.mtime}</div></div>`).join('');
+  repCache=d.reports.filter(r=>r.category==='daily'||r.category==='weekly');
+  renderRepList();
 }
 async function openReport(p){
   curReport=p;
