@@ -192,6 +192,8 @@ table.gt td,table.gt th{border:1px solid var(--line);padding:7px 11px;font-size:
 table.gt th{background:var(--panel2);color:var(--gold);font-weight:500}
 .chip{display:inline-block;background:var(--panel2);border:1px solid var(--line);border-radius:14px;padding:4px 12px;font-size:12px;margin:3px 4px 3px 0;color:var(--ink-dim)}
 .chip.hot{color:var(--gold);border-color:var(--gold-dim)}
+.sigrow{margin:5px 0;line-height:1.9}
+.sigrow .regnm{color:var(--ink-dim);display:inline-block;min-width:56px;font-size:12px}
 .gnote{font-size:12.5px;color:var(--ink-dim);line-height:1.9}
 /* reports */
 .rep{display:grid;grid-template-columns:300px 1fr;gap:14px;min-height:480px}
@@ -262,6 +264,17 @@ body.ro .robadge{display:inline-block}
   .evrow input{min-width:0}
   .newshead{flex-wrap:wrap}
   footer{padding:16px 12px 20px}
+  nav{scrollbar-width:none}
+  nav::-webkit-scrollbar{display:none}
+  .card .num{font-size:27px}
+  .card .comp{margin-top:8px}
+  .gauge{width:86px;height:48px}
+  .sigrow .regnm{display:block;min-width:0;margin-bottom:1px;color:var(--gold-dim);letter-spacing:.06em}
+  .sigrow{margin:9px 0}
+  #sigBox .chip{font-size:10.5px;padding:3px 9px;margin:2px 3px 2px 0}
+  .panel{padding:13px 12px}
+  .sovrow .v{font-size:13px;width:40px}
+  .mixrow .v{width:92px;font-size:10px}
 }
 </style>
 </head>
@@ -767,7 +780,7 @@ function renderSig(s){
     if(!chips.length) return '';
     const warn=d.low_evidence?`<span style="color:var(--amber);font-size:11px;margin-left:4px">⚠ ${t().sigLowEv(d.eff_n)}</span>`:'';
     const cov=(d.sentiment_coverage!=null&&d.sentiment_coverage<0.9)?`<span style="color:var(--red);font-size:11px;margin-left:4px">⚠ ${t().sigCovBad}</span>`:'';
-    return `<div style="margin:5px 0"><span style="color:var(--ink-dim);display:inline-block;min-width:56px;font-size:12px">${t().regions[r]}</span>${chips.join(' ')}${warn}${cov}</div>`;
+    return `<div class="sigrow"><span class="regnm">${t().regions[r]}</span>${chips.join(' ')}${warn}${cov}</div>`;
   }).filter(Boolean).join('');
   if(regRows) h+=`<div>${regRows}</div>`;
   const anyR=s.regions.NEA||s.regions.EU||s.regions.NA||s.regions.SEA;
