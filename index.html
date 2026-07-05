@@ -715,10 +715,11 @@ function gaugeSvg(v, band){
   const cx=52,cy=50,R=40;
   const x1=cx+R*Math.cos(a0), y1=cy-R*Math.sin(a0);
   const x2=cx+R*Math.cos(a1), y2=cy-R*Math.sin(a1);
-  const large=(v>50)?1:0;
+  // value arc spans v/100*180° — always the minor arc (large-arc flag 0);
+  // the old (v>50)?1:0 flag made scores above 50 loop the long way round
   return `<svg class="gauge" width="104" height="58" viewBox="0 0 104 58">
     <path d="M ${x1} ${y1} A ${R} ${R} 0 0 1 ${cx+R} ${cy}" fill="none" stroke="#2e2a24" stroke-width="8" stroke-linecap="round"/>
-    <path d="M ${x1} ${y1} A ${R} ${R} 0 ${large} 1 ${x2} ${y2}" fill="none" stroke="${col}" stroke-width="8" stroke-linecap="round"/>
+    <path d="M ${x1} ${y1} A ${R} ${R} 0 0 1 ${x2} ${y2}" fill="none" stroke="${col}" stroke-width="8" stroke-linecap="round"/>
   </svg>`;
 }
 function globalCard(g){
