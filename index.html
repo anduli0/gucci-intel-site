@@ -271,14 +271,14 @@ body.ro .robadge{display:inline-block}
 </header>
 <nav>
   <button id="tab-dash" class="on" onclick="showTab('dash')"></button>
-  <button id="tab-sp" onclick="showTab('sp')"></button>
-  <button id="tab-news" onclick="showTab('news')"></button>
-  <button id="tab-lux" onclick="showTab('lux')"></button>
-  <button id="tab-prod" onclick="showTab('prod')"></button>
-  <button id="tab-cal" onclick="showTab('cal')"></button>
-  <button id="tab-amb" onclick="showTab('amb')"></button>
-  <button id="tab-cd" onclick="showTab('cd')"></button>
   <button id="tab-rep" onclick="showTab('rep')"></button>
+  <button id="tab-news" onclick="showTab('news')"></button>
+  <button id="tab-sp" onclick="showTab('sp')"></button>
+  <button id="tab-lux" onclick="showTab('lux')"></button>
+  <button id="tab-cd" onclick="showTab('cd')"></button>
+  <button id="tab-prod" onclick="showTab('prod')"></button>
+  <button id="tab-amb" onclick="showTab('amb')"></button>
+  <button id="tab-cal" onclick="showTab('cal')"></button>
   <button id="tab-guide" onclick="showTab('guide')"></button>
   <button id="tab-run" onclick="showTab('run')"></button>
 </nav>
@@ -384,7 +384,7 @@ const STR = {
     spSecSpecial:'스페셜 심층 리포트', spSecSpecialNote:'패션쇼·핵심 이슈를 한 편의 전문 분석으로 — 최소 3일에 한 번 발행 보장',
     spSecEvents:'이벤트 플래시 대응', spSecEventsNote:'진행 중인 이벤트를 체크포인트(T+2h, T+24h…)별로 실시간 추적한 속보 리포트',
     prodEmpty:'제품 분석 데이터가 아직 없음<br>실행 탭의 제품 스캔을 돌리면 카테고리별 HOT·트렌드·신제품·스테디·베스트 보드가 여기 채워짐',
-    prodHead:(d)=>`${d} 기준 · 라벨은 보도·판매 근거 기반`, prodLabels:{hot:'HOT',trend:'트렌드',new:'신제품',steady:'스테디셀러',best:'베스트셀러'},
+    prodHead:(d)=>`${d} 기준 · 라벨은 보도·판매 근거 기반`, prodLabels:{hot:'HOT',trend:'TREND',new:'NEW',steady:'STEADY SELLER',best:'BEST SELLER'},
     prodEvPre:'근거 — ', prodPage:'제품 페이지', prodImgNone:'이미지 미확보',
     regions:{GLOBAL:'글로벌',NEA:'동북아',SEA:'동남아',NA:'북미',EU:'유럽'},
     bands:{'강한 매력':'강한 매력','우호':'우호','중립':'중립','주의':'주의','경고':'경고'},
@@ -407,11 +407,11 @@ const STR = {
     dashEmpty:'아직 지수 데이터가 없음<br>데일리 구찌 파이프라인을 한 번 돌리면 게이지·차트·점유율이 채워짐',
     goRun:'실행 탭으로 이동', sovNote:(d,t)=>`${d} 수집분 · 권역 합산 언급 ${t}건`, noSov:'언급량 데이터 없음', noTs:'시계열 없음',
     spEmpty:'스페셜 리포트가 아직 없음<br>구찌 패션쇼·신제품 출시가 있으면 실행 탭에서 스페셜 심층분석을 돌리면 여기 쌓임',
-    spCat:'GUCCI SPECIAL', newsHead:(g,l)=>`오늘의 주요 뉴스 — 구찌 ${g}건 · 럭셔리 ${l}건`, newsG:'구찌 10선', newsL:'럭셔리 10선', orig:'원문',
+    spCat:'GUCCI SPECIAL', newsHead:(g,l)=>`DAILY NEWS — Gucci ${g} · Luxury ${l}`, newsG:'GUCCI TOP 10', newsL:'LUXURY TOP 10', arch:'ARCHIVE', archNote:'시의성은 지났지만 중요한 항목 보관란 — 불필요해지면 자동 정리됨', orig:'원문',
     newsEmpty:'아직 뉴스 스크랩이 없음<br>실행 탭의 뉴스 스크랩을 돌리면 구찌 10건 + 럭셔리 10건이 매일 여기 쌓임',
     luxEmpty:'럭셔리 워치 데이터가 아직 없음<br>데일리 브리프 또는 위클리 럭셔리를 실행하면 업계 동향이 여기 쌓임',
     luxNone:'이 그룹의 신규 신호 없음', luxAsof:' 수집분', gucciView:'구찌 관점 — ',
-    groups:{'Kering':'케링','LVMH':'LVMH','Hermes-Chanel':'에르메스·샤넬','Jewelry':'주얼리','Beauty':'뷰티','Independents':'인디펜던트'},
+    groups:{'Gucci':'구찌','Kering':'케링','LVMH':'LVMH','Hermes-Chanel':'에르메스·샤넬','Jewelry':'주얼리','Beauty':'뷰티','Independents':'인디펜던트'},
     tags:{'competitive threat':'경쟁 위협','benchmark opportunity':'벤치마크 기회','category trend':'카테고리 트렌드','unrelated':'참고'},
     evEmpty:'이벤트 대응 기록이 없음<br>쇼·런칭·논란이 터지면 실행 탭에서 이벤트명을 넣고 돌리면 시점별 추적이 여기 쌓임',
     calEmpty:'캘린더 데이터가 아직 없음<br>데일리 브리프를 실행하면 다가오는 패션쇼·실적발표·출시 일정이 여기 쌓임',
@@ -449,7 +449,7 @@ const STR = {
     spSecSpecial:'Special Deep-Dive Reports', spSecSpecialNote:'Flagship expert analysis of shows and defining issues — published at least once every 3 days',
     spSecEvents:'Event Flash Response', spSecEventsNote:'Live event tracking by checkpoint (T+2h, T+24h…) — rapid-reaction reports',
     prodEmpty:'No product analysis yet<br>Run Product Scan from the Run tab to fill the per-category HOT / trend / new / steady / best board',
-    prodHead:(d)=>`as of ${d} · labels are evidence-based`, prodLabels:{hot:'HOT',trend:'TREND',new:'NEW',steady:'STEADY',best:'BEST'},
+    prodHead:(d)=>`as of ${d} · labels are evidence-based`, prodLabels:{hot:'HOT',trend:'TREND',new:'NEW',steady:'STEADY SELLER',best:'BEST SELLER'},
     prodEvPre:'Evidence — ', prodPage:'Product page', prodImgNone:'No image',
     regions:{GLOBAL:'Global',NEA:'NE Asia',SEA:'SE Asia',NA:'N. America',EU:'Europe'},
     bands:{'강한 매력':'Strong','우호':'Favorable','중립':'Neutral','주의':'Caution','경고':'Alert'},
@@ -472,11 +472,11 @@ const STR = {
     dashEmpty:'No index data yet<br>Run the Daily Gucci pipeline once to fill the gauge, chart and SOV',
     goRun:'Go to Run tab', sovNote:(d,t)=>`collected ${d} · ${t} total mentions across regions`, noSov:'No mention-count data', noTs:'No time series',
     spEmpty:'No special reports yet<br>When Gucci holds a fashion show or launches a product, run a Special deep-dive from the Run tab',
-    spCat:'GUCCI SPECIAL', newsHead:(g,l)=>`Today's top news — Gucci ${g} · Luxury ${l}`, newsG:'Gucci Top 10', newsL:'Luxury Top 10', orig:'source',
+    spCat:'GUCCI SPECIAL', newsHead:(g,l)=>`DAILY NEWS — Gucci ${g} · Luxury ${l}`, newsG:'GUCCI TOP 10', newsL:'LUXURY TOP 10', arch:'ARCHIVE', archNote:'Important but no-longer-timely items — pruned automatically', orig:'source',
     newsEmpty:'No news scrap yet<br>Run News Scrap from the Run tab — 10 Gucci + 10 luxury items land here daily',
     luxEmpty:'No luxury watch data yet<br>Run Daily Brief or Weekly Luxury to fill industry signals here',
     luxNone:'No new signals in this group', luxAsof:' collected', gucciView:'Gucci angle — ',
-    groups:{'Kering':'Kering','LVMH':'LVMH','Hermes-Chanel':'Hermès·Chanel','Jewelry':'Jewelry','Beauty':'Beauty','Independents':'Independents'},
+    groups:{'Gucci':'Gucci','Kering':'Kering','LVMH':'LVMH','Hermes-Chanel':'Hermès·Chanel','Jewelry':'Jewelry','Beauty':'Beauty','Independents':'Independents'},
     tags:{'competitive threat':'competitive threat','benchmark opportunity':'benchmark opportunity','category trend':'category trend','unrelated':'note'},
     evEmpty:'No event-response records<br>When a show, launch or controversy breaks, run it from the Run tab to track checkpoints here',
     calEmpty:'No calendar data yet<br>Run Daily Brief to fill upcoming shows, earnings and launches here',
@@ -935,9 +935,19 @@ async function loadNews(){
       <div class="src">${it.tier?`<span class="tierb">${esc(it.tier)}</span>`:''}${esc(it.source||'')} ${it.published_at?'· '+esc(it.published_at):''}
         ${it.url?` · <a href="${esc(it.url)}" target="_blank">${t().orig}</a>`:''}</div>
     </div></div>`;}).join('') + `</div>`;
+  const keep = d.keep||[];
+  const archHtml = keep.length ? `<h2 class="sec" style="margin-top:18px">${t().arch}</h2><div class="note" style="margin:-4px 0 10px">${t().archNote}</div>`
+    + keep.map(it=>{
+      const ti = LANG==='en' ? (it.title_original||it.title_ko||'') : (it.title_ko||it.title_original||'');
+      return `<div class="newsitem"><div class="rk" style="font-size:14px;color:var(--ink-dim)">${esc(it.published_at||'')}</div><div style="flex:1">
+        <div class="ti">${esc(ti)}</div>
+        <div class="sm">${esc(LANG==='en'?(it.summary_en||it.summary_ko||''):(it.summary_ko||it.summary_en||''))}</div>
+        ${(it.keep_reason_ko||it.keep_reason_en)?`<div class="why">${esc(LANG==='en'?(it.keep_reason_en||it.keep_reason_ko):(it.keep_reason_ko||it.keep_reason_en))}</div>`:''}
+        <div class="src">${it.tier?`<span class="tierb">${esc(it.tier)}</span>`:''}${esc(it.source||'')}${it.url?` · <a href="${esc(it.url)}" target="_blank">${t().orig}</a>`:''}</div>
+      </div></div>`;}).join('') : '';
   $('newsBody').innerHTML =
     `<div class="newshead"><span class="d">${esc(d.date)}</span><span class="note">${t().newsHead((d.gucci||[]).length,(d.luxury||[]).length)}${d.synthetic?' · synthetic':''}</span></div>
-     <div class="newscols">${col(t().newsG, d.gucci)}${col(t().newsL, d.luxury)}</div>`;
+     <div class="newscols">${col(t().newsG, d.gucci)}${col(t().newsL, d.luxury)}</div>` + archHtml;
 }
 
 /* ---------- luxury watch ---------- */
@@ -948,7 +958,7 @@ async function loadLux(){
     $('luxBody').innerHTML=`<div class="empty">${t().luxEmpty}<br><span class="go" onclick="showTab('run')">${t().goRun}</span></div>`;
     return;
   }
-  const groups=Object.keys(luxData.groups);
+  const groups=Object.keys(luxData.groups).sort((a,b)=>(a==='Gucci'?-1:b==='Gucci'?1:a.localeCompare(b)));
   if(!luxSel||!groups.includes(luxSel)) luxSel=groups[0];
   $('luxGroups').innerHTML = groups.map(g=>
     `<button class="${g===luxSel?'on':''}" data-g="${esc(g)}" onclick="selLux('${esc(g)}')">${t().groups[g]||g} (${luxData.groups[g].length})</button>`).join('')
@@ -963,7 +973,7 @@ function renderLux(){
   const items=luxData.groups[luxSel]||[];
   if(!items.length){ $('luxBody').innerHTML=`<div class="empty">${t().luxNone}</div>`; return; }
   const TAGC={'competitive threat':'threat','benchmark opportunity':'bench','category trend':'trend','unrelated':'etc'};
-  $('luxBody').innerHTML = items.map(it=>{
+  let _lx = items.map(it=>{
     const key=(it.relevance||'').toLowerCase();
     const cls=TAGC[key]||'etc', ko=t().tags[key]||it.relevance||'';
     const why = LANG==='en' ? (it.why_it_matters_en||it.why_it_matters||'') : (it.why_it_matters||it.why_it_matters_en||'');
@@ -977,6 +987,17 @@ function renderLux(){
         ${it.url?` · <a href="${esc(it.url)}" target="_blank">${t().orig}</a>`:''}</div>
     </div>`;
   }).join('');
+  const kp=(luxData.keeps&&luxData.keeps[luxSel])||[];
+  if(kp.length){
+    _lx += `<h2 class="sec" style="margin-top:16px">${t().arch}</h2><div class="note" style="margin:-4px 0 10px">${t().archNote}</div>`
+      + kp.map(it=>{
+        const why = LANG==='en' ? (it.why_it_matters_en||it.why_it_matters||'') : (it.why_it_matters||it.why_it_matters_en||'');
+        return `<div class="luxitem" style="opacity:.85"><div class="top"><span class="brand">${esc(it.brand||'')}</span><span class="etype">${esc(it.published_at||'')}</span></div>
+          <div class="hd">${esc(it.headline||'')}</div>
+          ${why?`<div class="why">${t().gucciView}${esc(why)}</div>`:''}
+          <div class="src">${esc(it.source||'')}${it.url?` · <a href="${esc(it.url)}" target="_blank">${t().orig}</a>`:''}</div></div>`;}).join('');
+  }
+  $('luxBody').innerHTML=_lx;
 }
 
 /* ---------- guide ---------- */
