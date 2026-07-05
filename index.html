@@ -109,6 +109,16 @@ h2.sec{font-family:var(--serif);font-size:13px;color:var(--gold-dim);font-weight
 .newsitem .src{font-size:11px;color:var(--ink-dim);margin-top:6px}
 .newsitem .src a{color:var(--blue);text-decoration:none}
 .tierb{display:inline-block;font-size:9.5px;border:1px solid var(--gold-dim);color:var(--gold);border-radius:4px;padding:0 5px;margin-right:6px;vertical-align:1px}
+/* news accordions */
+.acc{background:linear-gradient(165deg,#1b1815,#151310);border:1px solid var(--line);border-radius:10px;margin-bottom:12px;overflow:hidden}
+.acchead{display:flex;align-items:center;gap:12px;padding:14px 18px;cursor:pointer;user-select:none}
+.acchead .at{font-family:var(--serif);font-size:13px;letter-spacing:.28em;color:var(--gold)}
+.acchead .an{font-size:11px;color:var(--ink-dim)}
+.acchead .chev{margin-left:auto;color:var(--gold-dim);transition:transform .18s;font-size:12px}
+.acc.open .chev{transform:rotate(90deg)}
+.accbody{display:none;padding:2px 14px 14px}
+.acc.open .accbody{display:block}
+.acchead:hover .at{color:#e0c169}
 /* luxury watch */
 .luxgroups{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
 .luxgroups button{background:var(--panel);border:1px solid var(--line);border-radius:18px;color:var(--ink-dim);padding:7px 16px;cursor:pointer;font-family:inherit;font-size:12.5px}
@@ -926,7 +936,7 @@ async function loadNews(){
     $('newsBody').innerHTML=`<div class="empty">${t().newsEmpty}<br><span class="go" onclick="showTab('run')">${t().goRun}</span></div>`;
     return;
   }
-  const col = (title, items) => `<div><h2 class="sec">${title}</h2>` + (items||[]).map(it=>{
+  const item = it => {
     const ti = LANG==='en' ? (it.title_original||it.title_ko||'') : (it.title_ko||it.title_original||'');
     return `<div class="newsitem"><div class="rk">${it.rank??''}</div><div style="flex:1">
       <div class="ti">${esc(ti)}</div>
@@ -934,20 +944,35 @@ async function loadNews(){
       ${(it.why_gucci_ko||it.why_gucci_en)?`<div class="why">${t().gucciView}${esc(pickL(it,'why_gucci_ko','why_gucci_en'))}</div>`:''}
       <div class="src">${it.tier?`<span class="tierb">${esc(it.tier)}</span>`:''}${esc(it.source||'')} ${it.published_at?'· '+esc(it.published_at):''}
         ${it.url?` · <a href="${esc(it.url)}" target="_blank">${t().orig}</a>`:''}</div>
-    </div></div>`;}).join('') + `</div>`;
+    </div></div>`; };
+  const keepItem = it => {
+    const ti = LANG==='en' ? (it.title_original||it.title_ko||'') : (it.title_ko||it.title_original||'');
+    return `<div class="newsitem"><div class="rk" style="font-size:14px;color:var(--ink-dim)">${esc(it.published_at||'')}</div><div style="flex:1">
+      <div class="ti">${esc(ti)}</div>
+      <div class="sm">${esc(LANG==='en'?(it.summary_en||it.summary_ko||''):(it.summary_ko||it.summary_en||''))}</div>
+      ${(it.keep_reason_ko||it.keep_reason_en)?`<div class="why">${esc(LANG==='en'?(it.keep_reason_en||it.keep_reason_ko):(it.keep_reason_ko||it.keep_reason_en))}</div>`:''}
+      <div class="src">${it.tier?`<span class="tierb">${esc(it.tier)}</span>`:''}${esc(it.source||'')}${it.url?` · <a href="${esc(it.url)}" target="_blank">${t().orig}</a>`:''}</div>
+    </div></div>`; };
   const keep = d.keep||[];
-  const archHtml = keep.length ? `<h2 class="sec" style="margin-top:18px">${t().arch}</h2><div class="note" style="margin:-4px 0 10px">${t().archNote}</div>`
-    + keep.map(it=>{
-      const ti = LANG==='en' ? (it.title_original||it.title_ko||'') : (it.title_ko||it.title_original||'');
-      return `<div class="newsitem"><div class="rk" style="font-size:14px;color:var(--ink-dim)">${esc(it.published_at||'')}</div><div style="flex:1">
-        <div class="ti">${esc(ti)}</div>
-        <div class="sm">${esc(LANG==='en'?(it.summary_en||it.summary_ko||''):(it.summary_ko||it.summary_en||''))}</div>
-        ${(it.keep_reason_ko||it.keep_reason_en)?`<div class="why">${esc(LANG==='en'?(it.keep_reason_en||it.keep_reason_ko):(it.keep_reason_ko||it.keep_reason_en))}</div>`:''}
-        <div class="src">${it.tier?`<span class="tierb">${esc(it.tier)}</span>`:''}${esc(it.source||'')}${it.url?` · <a href="${esc(it.url)}" target="_blank">${t().orig}</a>`:''}</div>
-      </div></div>`;}).join('') : '';
+  const acc = (id, title, note, bodyHtml, count) =>
+    `<div class="acc ${newsAcc[id]?'open':''}" id="acc-${id}">
+       <div class="acchead" onclick="toggleAcc('${id}')">
+         <span class="at">${title}</span><span class="an">${count}</span>
+         <span class="chev">▶</span>
+       </div>
+       <div class="accbody">${note?`<div class="note" style="margin:2px 0 10px">${note}</div>`:''}${bodyHtml}</div>
+     </div>`;
   $('newsBody').innerHTML =
-    `<div class="newshead"><span class="d">${esc(d.date)}</span><span class="note">${t().newsHead((d.gucci||[]).length,(d.luxury||[]).length)}${d.synthetic?' · synthetic':''}</span></div>
-     <div class="newscols">${col(t().newsG, d.gucci)}${col(t().newsL, d.luxury)}</div>` + archHtml;
+    `<div class="newshead"><span class="d">${esc(d.date)}</span><span class="note">${t().newsHead((d.gucci||[]).length,(d.luxury||[]).length)}${d.synthetic?' · synthetic':''}</span></div>`
+    + acc('g', t().newsG, '', (d.gucci||[]).map(item).join(''), (d.gucci||[]).length)
+    + acc('l', t().newsL, '', (d.luxury||[]).map(item).join(''), (d.luxury||[]).length)
+    + (keep.length ? acc('a', t().arch, t().archNote, keep.map(keepItem).join(''), keep.length) : '');
+}
+let newsAcc={g:true,l:false,a:false};
+function toggleAcc(id){
+  newsAcc[id]=!newsAcc[id];
+  const el=document.getElementById('acc-'+id);
+  if(el) el.classList.toggle('open', newsAcc[id]);
 }
 
 /* ---------- luxury watch ---------- */
