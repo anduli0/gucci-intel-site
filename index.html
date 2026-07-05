@@ -935,7 +935,7 @@ async function loadProd(){
   if(!prodSel||!cats.find(c=>c.key===prodSel)) prodSel=cats[0].key;
   $('prodCats').innerHTML = cats.map(c=>
     `<button class="${c.key===prodSel?'on':''}" data-g="${esc(c.key)}" onclick="selProd('${esc(c.key)}')">${esc(LANG==='en'?(c.name_en||c.name_ko):(c.name_ko||c.name_en))} (${(c.items||[]).length})</button>`).join('')
-    + `<span class="note" style="align-self:center;margin-left:6px">${t().prodHead(prodData.date)}</span>`;
+    + `<span class="note" style="align-self:center;margin-left:6px">${t().prodHead(prodData.date)}${updB(prodData.date)}</span>`;
   renderProd();
 }
 function selProd(k){ prodSel=k;
@@ -979,7 +979,7 @@ async function loadCal(){
     return;
   }
   $('calBody').innerHTML =
-    `<div class="newshead"><span class="d">${esc(d.date)}</span><span class="note">${t().calHead(d.date, d.items.length)}</span></div>`+
+    `<div class="newshead"><span class="d">${esc(d.date)}</span>${updB(d.date)}<span class="note">${t().calHead(d.date, d.items.length)}</span></div>`+
     d.items.map(it=>{
       const ty=(it.type||'industry').toLowerCase();
       const why = LANG==='en' ? (it.why_en||it.why_ko||'') : (it.why_ko||it.why_en||'');
@@ -1007,7 +1007,7 @@ async function loadAmb(){
     return;
   }
   $('ambBody').innerHTML =
-    `<div class="newshead"><span class="d">${esc(d.date)}</span><span class="note">${t().ambHead(d.date, d.items.length)}</span></div>`+
+    `<div class="newshead"><span class="d">${esc(d.date)}</span>${updB(d.date)}<span class="note">${t().ambHead(d.date, d.items.length)}</span></div>`+
     d.items.map(it=>{
       const what = LANG==='en' ? (it.what_en||it.what_ko||'') : (it.what_ko||it.what_en||'');
       const imp = LANG==='en' ? (it.impact_en||it.impact_ko||'') : (it.impact_ko||it.impact_en||'');
@@ -1078,7 +1078,7 @@ async function loadNews(){
        <div class="accbody">${note?`<div class="note" style="margin:2px 0 10px">${note}</div>`:''}${bodyHtml}</div>
      </div>`;
   $('newsBody').innerHTML =
-    `<div class="newshead"><span class="d">${esc(d.date)}</span><span class="note">${t().newsHead((d.gucci||[]).length,(d.luxury||[]).length)}${d.synthetic?' · synthetic':''}</span></div>`
+    `<div class="newshead"><span class="d">${esc(d.date)}</span>${updB(d.date)}<span class="note">${t().newsHead((d.gucci||[]).length,(d.luxury||[]).length)}${d.synthetic?' · synthetic':''}</span></div>`
     + acc('g', t().newsG, '', (d.gucci||[]).map(item).join(''), (d.gucci||[]).length)
     + acc('l', t().newsL, '', (d.luxury||[]).map(item).join(''), (d.luxury||[]).length)
     + (keep.length ? acc('a', t().arch, t().archNote, keep.map(keepItem).join(''), keep.length) : '');
@@ -1102,7 +1102,7 @@ async function loadLux(){
   if(!luxSel||!groups.includes(luxSel)) luxSel=groups[0];
   $('luxGroups').innerHTML = groups.map(g=>
     `<button class="${g===luxSel?'on':''}" data-g="${esc(g)}" onclick="selLux('${esc(g)}')">${t().groups[g]||g} (${luxData.groups[g].length})</button>`).join('')
-    + `<span class="note" style="align-self:center;margin-left:6px">${luxData.date}${t().luxAsof}</span>`;
+    + `<span class="note" style="align-self:center;margin-left:6px">${luxData.date}${t().luxAsof}${updB(luxData.date)}</span>`;
   renderLux();
 }
 function selLux(g){ luxSel=g;
@@ -1278,10 +1278,10 @@ function renderRepList(){
       const label=kind?t().repKinds[kind]:esc(r.name.replace(/^\d{4}-\d{2}-\d{2}-?/,''));
       return `<div class="item ${curReport===r.path?'on':''}" onclick="openReport('${r.path}')">
         <div class="cat">${t().cats[r.category]||r.category}</div>
-        <div class="nm">${label}</div><div class="tm">${r.mtime}</div></div>`;
+        <div class="nm">${label}${updB(r.mtime)}</div><div class="tm">${r.mtime}</div></div>`;
     }).join(''):'';
     return `<div class="repdate ${open?'open':''}" onclick="toggleRepDate('${date}')">
-      <span class="arr">${open?'▾':'▸'}</span>${date}<span class="cnt">${items.length}</span></div>`+rows;
+      <span class="arr">${open?'▾':'▸'}</span>${date}${groups[date].some(r=>isToday(r.mtime))?updB(todayStr()):''}<span class="cnt">${items.length}</span></div>`+rows;
   }).join('');
 }
 async function loadReports(){
