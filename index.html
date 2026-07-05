@@ -651,7 +651,9 @@ function fmtDelta(d){
 
 /* ---------- dashboard ---------- */
 async function loadDash(){
-  const s = await jget('/api/summary');
+  let s=null;
+  try{ s = await jget('/api/summary'); }
+  catch(e){ $('dashEmpty').classList.remove('hidden'); $('dashBody').classList.add('hidden'); $('hdrDate').textContent=t().noData; return; }
   if(!s.has_data){
     $('dashEmpty').classList.remove('hidden'); $('dashBody').classList.add('hidden');
     $('hdrDate').textContent=t().noData;
