@@ -621,11 +621,19 @@ function saveKey(){
 }
 // One report = one file (KO first, EN after the marker); the CLIENT picks the
 // language, so the same code works on the live server and on static hosting.
+const REP_CACHE=new Map(); // path -> raw bilingual content (lang split happens per render)
 async function getReport(p){
-  const d=await jget('api/report/'+p);
-  if(d.error) return d;
+  let raw;
+  if(REP_CACHE.has(p)) raw=REP_CACHE.get(p);
+  else{
+    const d=await jget('api/report/'+p);
+    if(d.error) return d;
+    raw=d.content||'';
+    REP_CACHE.set(p, raw);
+    if(REP_CACHE.size>40) REP_CACHE.delete(REP_CACHE.keys().next().value);
+  }
   const M='<!-- ===== ENGLISH EDITION ===== -->';
-  let c=d.content||'';
+  let c=raw;
   if(c.includes(M)){ const parts=c.split(M); c=(LANG==='en'&&parts[1].trim())?parts[1].trim():parts[0].trim(); }
   // Korean view: the embedded English executive summary is redundant with the
   // full English edition — show it only in EN mode.
@@ -716,16 +724,59 @@ function globalCard(g){
     <div class="big">${g.GMAI.toFixed(1)}<span class="band ${bandCls(g.band)}">${bandKo2Lang(g.band)}</span></div>
     <div class="delta">${fmtDelta(g.delta)}</div></div>`;
 }
-function card(name, gmai, band, delta, comps){
-  let c='';
+function card(name, d){
+  const comps=d.components; let c='';
   if(comps){
     const rows=[[t().comps.sent,comps.sentiment],[t().comps.buzz,comps.buzz],[t().comps.eng,comps.engagement],[t().comps.sov,comps.sov]];
     c='<div class="comp">'+rows.map(([k,v])=>
       `<div class="row"><span>${k}</span><div class="bar"><i style="width:${Math.round(v*100)}%"></i></div><span>${(v*100).toFixed(0)}</span></div>`).join('')+'</div>';
   }
+  let meta='';
+  if(d.n_items!=null && d.eff_n!=null){
+    const warn=d.low_evidence?' <span style="color:var(--amber)">⚠</span>':'';
+    const cov=(d.sentiment_coverage!=null && d.sentiment_coverage<0.9)?` <span style="color:var(--red)">⚠</span>`:'';
+    meta=`<div style="font-size:10.5px;color:var(--ink-dim);margin-top:3px">${t().cardMeta(d.n_items, d.eff_n)}${warn}${cov}</div>`;
+  }
   return `<div class="card"><h3>${name}</h3>
-    <div class="num">${gmai.toFixed(1)}<span class="band ${bandCls(band)}">${bandKo2Lang(band)}</span></div>
-    <div class="delta">${fmtDelta(delta)}</div>${c}</div>`;
+    <div class="num">${d.GMAI.toFixed(1)}<span class="band ${bandCls(d.band)}">${bandKo2Lang(d.band)}</span></div>
+    <div class="delta">${fmtDelta(d.delta)}</div>${meta}${c}</div>`;
+}
+function renderSig(s){
+  const g=s.global, A=g.delta_attrib;
+  let h='';
+  if(A){
+    const parts=['sentiment','buzz','engagement','sov'].map(k=>{
+      const v=A[k]??0, col=v>0?'var(--green)':(v<0?'var(--red)':'var(--ink-dim)');
+      return `${t().gapDrv[k]} <b style="color:${col};font-weight:550">${v>0?'+':''}${v.toFixed(1)}p</b>`;
+    });
+    h+=`<div style="font-size:13px;margin-bottom:8px">${t().sigAttrib}${parts.join(' · ')}</div>`;
+  } else {
+    h+=`<div class="note" style="margin-bottom:8px">${t().sigNoPrev}</div>`;
+  }
+  const dir=(g.delta??0)>=0?'up':'down';
+  const hint=t().hints[g.band+'_'+dir]||'';
+  if(hint) h+=`<div style="font-size:13px;color:var(--amber);line-height:1.7;margin-bottom:10px">${hint}</div>`;
+  const regRows=['NEA','SEA','NA','EU'].map(r=>{
+    const d=s.regions[r]; if(!d||!d.drivers) return '';
+    const chip=(tg,p,col)=>`<span class="chip" style="color:${col};border-color:var(--line)">${esc(tg)} ${p>0?'+':''}${p.toFixed(1)}p</span>`;
+    const chips=[...(d.drivers.pos||[]).slice(0,2).map(([tg,p])=>chip(tg,p,'var(--green)')),
+                 ...(d.drivers.neg||[]).slice(0,2).map(([tg,p])=>chip(tg,p,'var(--red)'))];
+    if(!chips.length) return '';
+    const warn=d.low_evidence?`<span style="color:var(--amber);font-size:11px;margin-left:4px">⚠ ${t().sigLowEv(d.eff_n)}</span>`:'';
+    const cov=(d.sentiment_coverage!=null&&d.sentiment_coverage<0.9)?`<span style="color:var(--red);font-size:11px;margin-left:4px">⚠ ${t().sigCovBad}</span>`:'';
+    return `<div style="margin:5px 0"><span style="color:var(--ink-dim);display:inline-block;min-width:56px;font-size:12px">${t().regions[r]}</span>${chips.join(' ')}${warn}${cov}</div>`;
+  }).filter(Boolean).join('');
+  if(regRows) h+=`<div>${regRows}</div>`;
+  const anyR=s.regions.NEA||s.regions.EU||s.regions.NA||s.regions.SEA;
+  if(anyR && anyR.buzz_known===false) h+=`<div class="note" style="margin-top:8px">${t().sigHold(anyR.baseline_days??0)}</div>`;
+  h+=`<div style="margin-top:10px"><span style="display:inline-block;color:var(--gold);cursor:pointer;border:1px solid var(--gold-dim);border-radius:8px;padding:6px 14px;font-size:12px" onclick="openIndexReport()">${t().sigOpenRep}</span></div>`;
+  $('sigBox').innerHTML=h;
+}
+async function openIndexReport(){
+  const d=await jget('/api/reports');
+  const rep=(d.reports||[]).find(r=>r.category==='daily'&&r.name.includes('index-interpretation'));
+  if(rep){ showTab('rep'); openReport(rep.path); }
+  else showTab('rep');
 }
 let sovData=null, sovEvOpen=false;
 async function loadSov(){
@@ -877,7 +928,7 @@ function renderProd(){
     const lb=(it.label||'').toLowerCase();
     const isrc = it.image_local ? 'product-images/'+encodeURIComponent(it.image_local) : (it.image_url||'');
     const img = isrc
-      ? `<img src="${esc(isrc)}" decoding="async" onerror="this.parentNode.innerHTML='<span class=ph>GG</span>'" alt="">`
+      ? `<img src="${esc(isrc)}" loading="lazy" decoding="async" onerror="this.parentNode.innerHTML='<span class=ph>GG</span>'" alt="">`
       : `<span class="ph">GG</span>`;
     return `<div class="pcard">
       <div class="pimg">${img}</div>
@@ -1114,6 +1165,11 @@ const GUIDE_KO = `
     <tr><td>T3</td><td>0.4</td><td>일반 SNS · 커뮤니티 — 여론 온도계로만</td></tr></table>
     <div class="gnote">봇·스팸·짝퉁 판매·출처 불명은 수집 단계에서 차단.</div></div>
 </div>
+<div class="panel"><h2>지수 신뢰도 읽는 법</h2>
+  <div class="gnote">지수는 항상 근거의 양과 함께 읽어야 함. 각 기사·게시물의 무게는 신선도(3일 반감기 — 오늘 1.0, 3일 전 0.5, 일주일 전 0.2)와 매체 신뢰등급을 곱해 정해짐.<br><br>
+  · 카드의 <b>근거 n건 · 유효 n</b> — 수집 건수와, 가중치 적용 후 실제로 지수를 움직이는 유효 표본 수. 유효 표본이 3건 미만이면 ⚠가 붙고, 그날 그 권역 지수는 소수 기사에 좌우된 값이므로 방향 참고용으로만 읽을 것.<br>
+  · <b>화제·참여 판단 유보</b> — 30일 기준선이 5일 이상 쌓이기 전에는 중립(50)으로 고정. 그동안 지수는 사실상 감성+점유.<br>
+  · <b>오늘의 신호 패널</b> — 전일 대비 변동을 네 성분으로 분해(합계=변동폭)하고, 감성을 움직인 주제 태그를 지수 포인트로 보여줌. 초록 태그는 끌어올린 주제, 빨강 태그는 끌어내린 주제.</div></div>
 <div class="panel"><h2>감시 대상</h2><div id="poolChips" class="gnote">불러오는 중</div></div>
 <div class="panel"><h2>정직성 원칙</h2>
   <div class="gnote">모든 수치에는 출처 링크가 붙음. 확인 안 된 주장은 미확인 표기, 추측은 가설 표기. 팩트체크를 통과하지 못한 리포트는 발행되지 않음. X·인스타·틱톡의 세부 수치는 데이터 연동 전까지 비워 두며 절대 지어내지 않음.</div></div>`;
@@ -1153,6 +1209,11 @@ const GUIDE_EN = `
     <tr><td>T3</td><td>0.4</td><td>General SNS · communities — opinion thermometer only</td></tr></table>
     <div class="gnote">Bots, spam, counterfeit sellers and unattributable sources are blocked at collection.</div></div>
 </div>
+<div class="panel"><h2>How to read index confidence</h2>
+  <div class="gnote">Always read the index together with its evidence. Each item's weight = freshness (3-day half-life — today 1.0, 3 days 0.5, a week ~0.2) × source tier.<br><br>
+  · <b>"n items · eff. n"</b> on each card — collected items vs the effective sample that actually moves the index after weighting. Below 3 effective items a ⚠ appears: that region's number is driven by a handful of articles — directional only.<br>
+  · <b>Buzz/Engagement withheld</b> — held neutral (50) until 5+ baseline days accumulate; until then the index is effectively sentiment + SOV.<br>
+  · <b>Today's Signal panel</b> — splits the day-over-day move into the four components (they sum to the move) and shows which themes moved sentiment, in index points. Green tags pushed up; red tags pulled down.</div></div>
 <div class="panel"><h2>Watchlist</h2><div id="poolChips" class="gnote">Loading</div></div>
 <div class="panel"><h2>Honesty principles</h2>
   <div class="gnote">Every figure carries a source link. Unverified claims are flagged; speculation is labeled. Reports that fail fact-check are not published. Detailed X/Instagram/TikTok metrics stay empty until data connectors are added — never fabricated.</div></div>`;
@@ -1291,7 +1352,7 @@ async function pollRun(){
     $('keyRow').classList.add('hidden');
     $('runstate').classList.remove('running');
     $('runtext').textContent=t().idle; $('hdrStatus').textContent='';
-    pollTimer=setTimeout(pollRun, 30000);
+    pollTimer=setTimeout(pollRun, curTab==='run'?30000:120000);
     return;
   }
   $('engineOff').classList.add('hidden');
@@ -1316,9 +1377,9 @@ async function pollRun(){
     const lg=await fetchRun('api/runlog');
     if(lg.lines && lg.lines.length){ const box=$('runlog'); box.textContent=lg.lines.join('\n'); box.scrollTop=box.scrollHeight; }
   }catch(e){}
-  pollTimer=setTimeout(pollRun, st.running?4000:15000);
+  pollTimer=setTimeout(pollRun, st.running?4000:(curTab==='run'?15000:60000));
 }
-function refreshAll(){ loadDash(); if(curTab==='rep')loadReports(); if(curTab==='sp')loadSpecial(); if(curTab==='news')loadNews(); if(curTab==='lux')loadLux(); if(curTab==='prod')loadProd(); if(curTab==='cal')loadCal(); if(curTab==='amb')loadAmb(); if(curTab==='cd')loadCd(); if(curTab==='guide')renderGuide(); pollRun(); }
+function refreshAll(){ REP_CACHE.clear(); loadDash(); if(curTab==='rep')loadReports(); if(curTab==='sp')loadSpecial(); if(curTab==='news')loadNews(); if(curTab==='lux')loadLux(); if(curTab==='prod')loadProd(); if(curTab==='cal')loadCal(); if(curTab==='amb')loadAmb(); if(curTab==='cd')loadCd(); if(curTab==='guide')renderGuide(); pollRun(); }
 applyChrome(); renderGuide(); loadDash(); pollRun();
 </script>
 </body>
