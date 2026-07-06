@@ -8,7 +8,9 @@
 - **멱등성**: `api/summary`의 `date`가 이미 오늘(KST)이면 이미 업데이트된 것이다. 아무것도 변경하지 말고 "이미 업데이트됨"으로 종료한다.
 - **사실만 기록**: 모든 뉴스 항목은 WebSearch로 실제 확인된 기사만 넣는다. URL·매체명·발행일을 지어내지 않는다. 검증 불가한 항목은 버린다.
 - **스키마 보존**: 각 파일은 전날(가장 최근) 버전과 **정확히 같은 JSON 구조**를 유지한다. 필드를 빼거나 이름을 바꾸지 않는다. 커밋 전 모든 수정 파일을 `python3 -m json.tool`로 검증한다.
-- `index.html`, `api/status`, `api/runlog`, `api/pool`, `product-images/`, `.github/`는 **건드리지 않는다**.
+- `index.html`, `api/status`, `api/runlog`, `api/pool`, `.github/`, `automation/`은 **건드리지 않는다**. `product-images/`는 제품 순위 변경 시 파일명 갱신만 허용.
+- **파일 삭제 금지**: `rsync --delete`나 디렉토리 통째 교체 방식을 절대 쓰지 않는다. 기존 파일을 제자리에서 수정(edit)만 한다. (2026-07-06 실행에서 rsync --delete가 `.github/workflows/pages.yml`과 이 런북을 삭제해 배포가 끊긴 사고가 있었다.)
+- 커밋 직전 필수 확인: `git status`에서 삭제(D)된 파일이 없는지, `.github/workflows/pages.yml`·`automation/DAILY_UPDATE.md`·`index.html`이 존재하는지 확인한다.
 - 이 환경에서는 WebFetch/curl로 외부 사이트 본문을 읽을 수 없을 수 있다(네트워크 정책). **WebSearch를 주 수단**으로 사용하고, 검색 결과 요약·스니펫에 근거해 작성한다. 근거가 얇으면 해당 권역에 `low_evidence: true`를 정직하게 표기하고 `_freshness_note`에 한계를 기록한다.
 
 ## 1. 리서치 (WebSearch)
@@ -63,6 +65,7 @@
 3. 커밋: `git add -A && git commit -m "auto publish YYYY-MM-DD (claude cloud)"`
 4. 푸시: `git push origin main` (실패 시 2s/4s/8s/16s 백오프로 최대 4회 재시도)
 5. 푸시가 성공하면 GitHub Actions `deploy-pages` 워크플로우가 자동으로 사이트를 배포한다(~1분).
+6. **배포 확인 필수**: 푸시 2~3분 후 GitHub MCP 도구(`actions_list`)로 방금 커밋의 `deploy-pages` 실행이 success인지 확인한다. 실패했으면 로그를 확인하고 `actions_run_trigger`(run_workflow, pages.yml, ref=main)로 새 실행을 트리거한 뒤 다시 확인한다. 같은 실행의 재시도(rerun)는 아티팩트 중복 오류를 일으키므로 반드시 **새 실행**을 만든다. 배포 성공까지 확인해야 작업 완료다.
 
 ## 5. 완료 보고
 
