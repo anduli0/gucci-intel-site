@@ -601,6 +601,7 @@ function applyChrome(){
 }
 function showTab(tb){
   curTab=tb;
+  DOC_LOCK={}; // leaving/re-entering a tab always returns to its list view
   for(const x of ['dash','sp','news','lux','prod','cal','amb','cd','rep','guide','run']){
     $('view-'+x).classList.toggle('hidden', x!==tb);
     $('tab-'+x).classList.toggle('on', x===tb);
@@ -877,6 +878,7 @@ function openFromDash(p){
 }
 async function loadCd(){
   const d = await jget('/api/reports');
+  if(DOC_LOCK['cdBody']) return; // a document view opened while we were fetching
   const cds = d.reports.filter(r=>r.category==='cd');
   $('cdBody').innerHTML = cds.length ? cds.map(r=>
     `<div class="spitem" onclick="openFromDash('${r.path}')">
