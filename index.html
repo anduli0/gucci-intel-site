@@ -242,7 +242,6 @@ button.ghost{background:none;border:1px solid var(--line);color:var(--ink-dim);b
 #runlog{background:#0a0908;border:1px solid var(--line);border-radius:10px;padding:14px;font-family:Consolas,monospace;font-size:11.5px;color:#b9b19e;white-space:pre-wrap;max-height:46vh;overflow-y:auto;line-height:1.6}
 .note{font-size:12px;color:var(--ink-dim);line-height:1.8;margin-top:12px}
 body.ro .robadge{display:inline-block}
-.updbadge{display:inline-block;font-size:9px;padding:1px 6px;border-radius:7px;background:#1d4d33;color:#7fd6a4;margin-left:6px;vertical-align:2px;letter-spacing:.08em;font-weight:500}
 .robadge{display:none;font-size:10.5px;border:1px solid var(--gold-dim);color:var(--gold-dim);border-radius:5px;padding:1px 8px;letter-spacing:.15em;margin-left:4px;vertical-align:2px}
 @media (max-width:980px){ .cards,.gcards,.prevs,.runbtns{grid-template-columns:1fr 1fr} .grid2,.rep,.newscols{grid-template-columns:1fr} }
 @media (max-width:640px){
@@ -444,7 +443,6 @@ const STR = {
       '경고_down':'평판 리스크 구간 — 즉시 이벤트 대응 실행 권장.'},
     back:'← 목록으로',
     footOwner:'본 시스템과 모든 리포트·지수·데이터·분석물의 소유권은 MINKYU AN과 MIRU KIM에게 있음.<br>ⓒ 2026 MINKYU AN &amp; MIRU KIM. All Rights Reserved. 무단 복제·전재·재배포 금지.',
-    upd:'업데이트',
     sovEvBtn:'집계 근거 보기', sovEvHide:'집계 근거 닫기',
     sovMaterial:'자료 유형', sovWindow:'집계 기간', sovCriteria:'집계 기준', sovQueries:'사용 검색어(브랜드명만 치환, 전 브랜드 동일)', sovMatrix:'권역 × 브랜드 원본 집계(건)',
     mixNote:'긍정 / 중립 / 부정 건수 — 색 면적은 비중', prev:'최신 리포트', noPrev:'발행된 리포트 없음',
@@ -529,7 +527,6 @@ const STR = {
       '경고_down':'Reputation-risk zone — run Event Response immediately.'},
     back:'← Back to list',
     footOwner:'This system and all reports, indices, data and analysis herein are the property of MINKYU AN and MIRU KIM.<br>ⓒ 2026 MINKYU AN &amp; MIRU KIM. All Rights Reserved. Unauthorized reproduction or redistribution prohibited.',
-    upd:'UPDATED',
     sovEvBtn:'Show counting evidence', sovEvHide:'Hide counting evidence',
     sovMaterial:'Material type', sovWindow:'Window', sovCriteria:'Counting rules', sovQueries:'Query templates (brand name substituted, identical per brand)', sovMatrix:'Raw counts — region × brand',
     mixNote:'positive / neutral / negative counts — width shows share', prev:'Latest Reports', noPrev:'No reports published yet',
@@ -657,11 +654,6 @@ async function getReport(p){
   return {content:c};
 }
 function esc(s){ return String(s??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-// "업데이트" badge: shown only while the viewer's local date equals the
-// content's publish date — disappears by itself the next day.
-function todayStr(){ const d=new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
-function isToday(s){ return !!s && String(s).slice(0,10)===todayStr(); }
-function updB(s){ return isToday(s)?`<span class="updbadge">${t().upd}</span>`:''; }
 function bandCls(b){ return 'b-'+(b||'').replace(/\s/g,''); }
 function bandKo2Lang(b){ return t().bands[b]||b; }
 function fmtDelta(d){
@@ -862,7 +854,7 @@ async function loadPrevs(){
     const c = await getReport(r.path);
     const txt = (c.content||'').split(/\r?\n/).filter(l=>l.trim()&&!l.startsWith('#')).slice(0,4).join(' ');
     return `<div class="prev" onclick="openFromDash('${r.path}')">
-      <div class="cat">${t().cats[r.category]||r.category}${updB(r.mtime)}</div>
+      <div class="cat">${t().cats[r.category]||r.category}</div>
       <div class="ttl">${esc(r.name)}</div>
       <div class="txt">${esc(txt.slice(0,150))}</div>
       <div class="tm">${r.mtime}</div></div>`;
@@ -880,7 +872,7 @@ async function loadCd(){
   const cds = d.reports.filter(r=>r.category==='cd');
   $('cdBody').innerHTML = cds.length ? cds.map(r=>
     `<div class="spitem" onclick="openFromDash('${r.path}')">
-      <div class="cat">${t().cdCat}${updB(r.mtime)}</div>
+      <div class="cat">${t().cdCat}</div>
       <div class="ttl">${esc(r.name)}</div>
       <div class="tm">${r.mtime}</div></div>`).join('')
     : `<div class="empty">${t().cdEmpty}</div>`;
@@ -935,7 +927,7 @@ async function loadProd(){
   if(!prodSel||!cats.find(c=>c.key===prodSel)) prodSel=cats[0].key;
   $('prodCats').innerHTML = cats.map(c=>
     `<button class="${c.key===prodSel?'on':''}" data-g="${esc(c.key)}" onclick="selProd('${esc(c.key)}')">${esc(LANG==='en'?(c.name_en||c.name_ko):(c.name_ko||c.name_en))} (${(c.items||[]).length})</button>`).join('')
-    + `<span class="note" style="align-self:center;margin-left:6px">${t().prodHead(prodData.date)}${updB(prodData.date)}</span>`;
+    + `<span class="note" style="align-self:center;margin-left:6px">${t().prodHead(prodData.date)}</span>`;
   renderProd();
 }
 function selProd(k){ prodSel=k;
@@ -979,7 +971,7 @@ async function loadCal(){
     return;
   }
   $('calBody').innerHTML =
-    `<div class="newshead"><span class="d">${esc(d.date)}</span>${updB(d.date)}<span class="note">${t().calHead(d.date, d.items.length)}</span></div>`+
+    `<div class="newshead"><span class="d">${esc(d.date)}</span><span class="note">${t().calHead(d.date, d.items.length)}</span></div>`+
     d.items.map(it=>{
       const ty=(it.type||'industry').toLowerCase();
       const why = LANG==='en' ? (it.why_en||it.why_ko||'') : (it.why_ko||it.why_en||'');
@@ -1007,7 +999,7 @@ async function loadAmb(){
     return;
   }
   $('ambBody').innerHTML =
-    `<div class="newshead"><span class="d">${esc(d.date)}</span>${updB(d.date)}<span class="note">${t().ambHead(d.date, d.items.length)}</span></div>`+
+    `<div class="newshead"><span class="d">${esc(d.date)}</span><span class="note">${t().ambHead(d.date, d.items.length)}</span></div>`+
     d.items.map(it=>{
       const what = LANG==='en' ? (it.what_en||it.what_ko||'') : (it.what_ko||it.what_en||'');
       const imp = LANG==='en' ? (it.impact_en||it.impact_ko||'') : (it.impact_ko||it.impact_en||'');
@@ -1026,14 +1018,14 @@ async function loadSpecial(){
   const sp = rd.reports.filter(r=>r.category==='special');
   const spHtml = sp.length ? sp.map(r=>
     `<div class="spitem" onclick="openFromDash('${r.path}')">
-      <div class="cat">${t().spCat}${updB(r.mtime)}</div>
+      <div class="cat">${t().spCat}</div>
       <div class="ttl">${esc(r.name)}</div>
       <div class="tm">${r.mtime}</div></div>`).join('')
     : `<div class="empty">${t().spEmpty}<br><span class="go" onclick="showTab('run')">${t().goRun}</span></div>`;
   const evHtml = (ed.events||[]).length ? ed.events.map(ev=>
     `<div class="evcard"><div class="eid">${esc(ev.event_id)}</div>`+
     ev.checkpoints.map(c=>
-      `<div class="cp"><span class="cpn">${esc(c.checkpoint)}</span><span class="tm">${c.mtime}${updB(c.mtime)}</span>`+
+      `<div class="cp"><span class="cpn">${esc(c.checkpoint)}</span><span class="tm">${c.mtime}</span>`+
       (c.report?`<span class="open" onclick="openFromDash('${c.report}')">${t().openRep}</span>`:`<span class="open" style="color:var(--ink-dim);cursor:default">${t().noRep}</span>`)+
       `</div>`).join('')+`</div>`).join('')
     : `<div class="empty">${t().evEmpty}</div>`;
@@ -1078,7 +1070,7 @@ async function loadNews(){
        <div class="accbody">${note?`<div class="note" style="margin:2px 0 10px">${note}</div>`:''}${bodyHtml}</div>
      </div>`;
   $('newsBody').innerHTML =
-    `<div class="newshead"><span class="d">${esc(d.date)}</span>${updB(d.date)}<span class="note">${t().newsHead((d.gucci||[]).length,(d.luxury||[]).length)}${d.synthetic?' · synthetic':''}</span></div>`
+    `<div class="newshead"><span class="d">${esc(d.date)}</span><span class="note">${t().newsHead((d.gucci||[]).length,(d.luxury||[]).length)}${d.synthetic?' · synthetic':''}</span></div>`
     + acc('g', t().newsG, '', (d.gucci||[]).map(item).join(''), (d.gucci||[]).length)
     + acc('l', t().newsL, '', (d.luxury||[]).map(item).join(''), (d.luxury||[]).length)
     + (keep.length ? acc('a', t().arch, t().archNote, keep.map(keepItem).join(''), keep.length) : '');
@@ -1102,7 +1094,7 @@ async function loadLux(){
   if(!luxSel||!groups.includes(luxSel)) luxSel=groups[0];
   $('luxGroups').innerHTML = groups.map(g=>
     `<button class="${g===luxSel?'on':''}" data-g="${esc(g)}" onclick="selLux('${esc(g)}')">${t().groups[g]||g} (${luxData.groups[g].length})</button>`).join('')
-    + `<span class="note" style="align-self:center;margin-left:6px">${luxData.date}${t().luxAsof}${updB(luxData.date)}</span>`;
+    + `<span class="note" style="align-self:center;margin-left:6px">${luxData.date}${t().luxAsof}</span>`;
   renderLux();
 }
 function selLux(g){ luxSel=g;
@@ -1278,10 +1270,10 @@ function renderRepList(){
       const label=kind?t().repKinds[kind]:esc(r.name.replace(/^\d{4}-\d{2}-\d{2}-?/,''));
       return `<div class="item ${curReport===r.path?'on':''}" onclick="openReport('${r.path}')">
         <div class="cat">${t().cats[r.category]||r.category}</div>
-        <div class="nm">${label}${updB(r.mtime)}</div><div class="tm">${r.mtime}</div></div>`;
+        <div class="nm">${label}</div><div class="tm">${r.mtime}</div></div>`;
     }).join(''):'';
     return `<div class="repdate ${open?'open':''}" onclick="toggleRepDate('${date}')">
-      <span class="arr">${open?'▾':'▸'}</span>${date}${groups[date].some(r=>isToday(r.mtime))?updB(todayStr()):''}<span class="cnt">${items.length}</span></div>`+rows;
+      <span class="arr">${open?'▾':'▸'}</span>${date}<span class="cnt">${items.length}</span></div>`+rows;
   }).join('');
 }
 async function loadReports(){
