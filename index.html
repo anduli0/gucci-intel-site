@@ -1071,7 +1071,7 @@ async function loadNews(){
       <div class="ti">${esc(ti)}</div>
       <div class="sm">${esc(LANG==='en'?(it.summary_en||it.summary_ko||''):(it.summary_ko||it.summary_en||''))}</div>
       ${(it.keep_reason_ko||it.keep_reason_en)?`<div class="why">${esc(LANG==='en'?(it.keep_reason_en||it.keep_reason_ko):(it.keep_reason_ko||it.keep_reason_en))}</div>`:''}
-      <div class="src">${it._set==='g'?`<span class="tierb">Gucci</span>`:it._set==='l'?`<span class="tierb">Luxury</span>`:''}${it.tier?`<span class="tierb">${esc(it.tier)}</span>`:''}${esc(it.source||'')}${it.url?` · <a href="${esc(it.url)}" target="_blank">${t().orig}</a>`:''}</div>
+      <div class="src">${it.tier?`<span class="tierb">${esc(it.tier)}</span>`:''}${esc(it.source||'')}${it.url?` · <a href="${esc(it.url)}" target="_blank">${t().orig}</a>`:''}</div>
     </div></div>`; };
   const keep = d.keep||[];
   const acc = (id, title, note, bodyHtml, count) =>
@@ -1082,30 +1082,11 @@ async function loadNews(){
        </div>
        <div class="accbody">${note?`<div class="note" style="margin:2px 0 10px">${note}</div>`:''}${bodyHtml}</div>
      </div>`;
-  // Lead with each set's LATEST-day news (capped at 10); anything from an earlier
-  // day — still important but no longer today's — drops into the archive.
-  const latestOf = arr => arr.reduce((m,x)=> (x.published_at && x.published_at>m) ? x.published_at : m, '');
-  const splitLatest = arr => {
-    const L = latestOf(arr);
-    if(!L){ return { L:'', top:arr.slice(0,10), overflow:arr.slice(10), old:[] }; }
-    const today = arr.filter(x=>x.published_at===L).sort((a,b)=>(a.rank??99)-(b.rank??99));
-    const old = arr.filter(x=>x.published_at!==L);
-    return { L, top: today.slice(0,10), overflow: today.slice(10), old };
-  };
-  const G = splitLatest(d.gucci||[]);
-  const Lx = splitLatest(d.luxury||[]);
-  const arch = [
-    ...G.old.map(x=>({...x,_set:'g'})), ...G.overflow.map(x=>({...x,_set:'g'})),
-    ...Lx.old.map(x=>({...x,_set:'l'})), ...Lx.overflow.map(x=>({...x,_set:'l'})),
-    ...keep.map(x=>({...x,_set:x._set||'k'})),
-  ].sort((a,b)=> String(b.published_at||'').localeCompare(String(a.published_at||'')));
-  const dlabel = L => L ? ` <span style="font-weight:400;color:var(--ink-dim);font-size:12px">· ${esc(L)}</span>` : '';
-  const noneLine = `<div class="note" style="padding:6px 2px">${LANG==='en'?'No items for the latest day.':'최신일 신규 항목 없음'}</div>`;
   $('newsBody').innerHTML =
-    `<div class="newshead"><span class="d">${esc(d.date)}</span><span class="note">${t().newsHead(G.top.length,Lx.top.length)}${arch.length?` · ${t().arch} ${arch.length}`:''}${d.synthetic?' · synthetic':''}</span></div>`
-    + acc('g', t().newsG+dlabel(G.L), '', G.top.map(item).join('')||noneLine, G.top.length)
-    + acc('l', t().newsL+dlabel(Lx.L), '', Lx.top.map(item).join('')||noneLine, Lx.top.length)
-    + (arch.length ? acc('a', t().arch, t().archNote, arch.map(keepItem).join(''), arch.length) : '');
+    `<div class="newshead"><span class="d">${esc(d.date)}</span><span class="note">${t().newsHead((d.gucci||[]).length,(d.luxury||[]).length)}${d.synthetic?' · synthetic':''}</span></div>`
+    + acc('g', t().newsG, '', (d.gucci||[]).map(item).join(''), (d.gucci||[]).length)
+    + acc('l', t().newsL, '', (d.luxury||[]).map(item).join(''), (d.luxury||[]).length)
+    + (keep.length ? acc('a', t().arch, t().archNote, keep.map(keepItem).join(''), keep.length) : '');
 }
 let newsAcc={g:true,l:false,a:false};
 function toggleAcc(id){
