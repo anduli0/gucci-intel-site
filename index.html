@@ -1370,9 +1370,17 @@ function runEvent(cmd){
 }
 async function pollRun(){
   clearTimeout(pollTimer);
+  // static build-stamp self-heal: on the baked site, re-read the same-origin
+  // status each poll; a changed ui_mtime means a newer export shipped → reload.
+  if(RB!==''){
+    try{ const s0=await (await fetch('api/status?v='+Date.now())).json();
+      if(s0 && s0.static && s0.ui_mtime){ if(uiMtime===null) uiMtime=s0.ui_mtime; else if(s0.ui_mtime!==uiMtime){ location.reload(); return; } }
+    }catch(e){}
+  }
   let st=null;
   try{ st=await fetchRun('api/status'); }catch(e){ st=null; }
   if(st && st.static){  // baked snapshot (GitHub Pages) → control the engine remotely
+    if(st.ui_mtime && uiMtime===null) uiMtime=st.ui_mtime;
     RB=REMOTE_BASE;
     try{ st=await fetchRun('api/status'); }catch(e){ st=null; }
   }
