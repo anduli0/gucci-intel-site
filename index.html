@@ -887,11 +887,13 @@ async function loadCd(){
       <div class="tm">${r.mtime}</div></div>`).join('')
     : `<div class="empty">${t().cdEmpty}</div>`;
 }
+let DOC_LOCK={}; // bodyId -> true while a document view owns that body (blocks async list overwrites)
 async function openDoc(path, bodyId, backFn){
+  DOC_LOCK[bodyId]=true; // set synchronously, before any await
   const d=await getReport(path);
   const back=`<button class="ghost" style="margin-bottom:12px" id="docBack">${t().back}</button>`;
   $(bodyId).innerHTML = back + `<div class="repview" style="max-height:none">${d.error?`<div class="empty">${esc(d.error)}</div>`:renderMd(d.content)}</div>`;
-  $('docBack').onclick=backFn;
+  $('docBack').onclick=()=>{ DOC_LOCK[bodyId]=false; backFn(); };
   window.scrollTo(0,0);
 }
 
@@ -1025,6 +1027,7 @@ async function loadAmb(){
 /* ---------- special + events (merged desk) ---------- */
 async function loadSpecial(){
   const [rd, ed] = await Promise.all([jget('/api/reports'), jget('/api/events')]);
+  if(DOC_LOCK['spBody']) return; // a document view opened while we were fetching
   const sp = rd.reports.filter(r=>r.category==='special');
   const spHtml = sp.length ? sp.map(r=>
     `<div class="spitem" onclick="openFromDash('${r.path}')">
