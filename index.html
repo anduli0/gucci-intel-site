@@ -1481,27 +1481,27 @@ applyChrome(); renderGuide(); loadDash(); pollRun();
       #ddCap{font-size:11px;padding:8px 15px} }`;
 
   const snail=`
-   <path d="M42 106 C92 128 152 130 184 118 C198 113 207 105 212 90"/>
-   <path d="M42 106 C30 94 28 76 44 66 C58 57 76 60 84 76"/>
-   <path d="M44 66 C40 50 50 40 64 42 C77 44 82 57 74 66"/>
-   <path d="M50 68 Q59 76 70 67"/>
-   <path d="M50 43 C45 30 42 22 40 15"/>
-   <path d="M66 43 C69 30 73 22 78 15"/>
-   <path d="M40 15 c-3.5 -4.5 -10 -1 -7 4.5 c1.3 2.4 4.4 4.4 7 6.5 c2.6 -2.1 5.7 -4.1 7 -6.5 c3 -5.5 -3.5 -9 -7 -4.5"/>
-   <path d="M78 15 c-3.5 -4.5 -10 -1 -7 4.5 c1.3 2.4 4.4 4.4 7 6.5 c2.6 -2.1 5.7 -4.1 7 -6.5 c3 -5.5 -3.5 -9 -7 -4.5"/>
-   <path d="M84 90 C140 98 180 82 176 54 C173 32 148 22 126 28 C107 33 99 53 111 69 C118 78 132 79 139 68 C143 61 140 53 133 52"/>
-   <circle cx="53" cy="57" r="3.2"/><circle cx="65" cy="55" r="3.2"/>`;
+   <path d="M40 108 C88 128 150 130 182 118 C196 113 206 104 210 90"/>
+   <path d="M40 108 C28 96 27 77 43 67 C57 58 76 61 84 77"/>
+   <path d="M43 67 C39 51 49 41 63 43 C76 45 81 58 73 67"/>
+   <path d="M49 69 Q58 77 69 68"/>
+   <path d="M49 44 C44 31 41 23 39 16"/>
+   <path d="M65 44 C68 31 72 23 77 16"/>
+   <path d="M39 16 c-3.5 -4.5 -10 -1 -7 4.5 c1.3 2.4 4.4 4.4 7 6.5 c2.6 -2.1 5.7 -4.1 7 -6.5 c3 -5.5 -3.5 -9 -7 -4.5"/>
+   <path d="M77 16 c-3.5 -4.5 -10 -1 -7 4.5 c1.3 2.4 4.4 4.4 7 6.5 c2.6 -2.1 5.7 -4.1 7 -6.5 c3 -5.5 -3.5 -9 -7 -4.5"/>
+   <path d="M84 91 C140 99 180 82 176 54 C173 32 148 22 126 28 C107 33 99 53 111 69 C118 78 132 79 139 68 C143 61 140 53 133 52"/>
+   <circle cx="52" cy="58" r="3.2"/><circle cx="64" cy="56" r="3.2"/>`;
   const heart=`
-   <path d="M60 36 C49 16 24 13 17 31 C10 46 25 64 60 96 C95 64 110 46 103 31 C96 13 71 16 62 34"/>`;
+   <path d="M57 44 C50 24 30 22 24 40 C19 54 32 74 56 116 C88 72 110 48 105 28 C101 13 76 12 64 32"/>`;
 
   const st=document.createElement('style'); st.textContent=css; document.head.appendChild(st);
   const w=document.createElement('div'); w.id='doodleDay';
   w.innerHTML=`
    <svg class="dd dd1" style="top:100px;right:3%;width:150px;--rot:-7deg" viewBox="0 0 230 160">${snail}</svg>
-   <svg class="dd dd2" style="top:36%;left:3%;width:82px;--rot:-12deg" viewBox="0 0 120 110">${heart}</svg>
-   <svg class="dd dd3" style="top:56%;right:16%;width:58px;--rot:14deg" viewBox="0 0 120 110">${heart}</svg>
+   <svg class="dd dd2" style="top:36%;left:3%;width:82px;--rot:-12deg" viewBox="0 0 120 130">${heart}</svg>
+   <svg class="dd dd3" style="top:56%;right:16%;width:58px;--rot:14deg" viewBox="0 0 120 130">${heart}</svg>
    <svg class="dd dd4" style="bottom:8%;left:4%;width:190px;--rot:4deg" viewBox="0 0 230 160">${snail}</svg>
-   <svg class="dd dd5" style="bottom:24%;right:5%;width:50px;--rot:-18deg" viewBox="0 0 120 110">${heart}</svg>
+   <svg class="dd dd5" style="bottom:24%;right:5%;width:50px;--rot:-18deg" viewBox="0 0 120 130">${heart}</svg>
    <div id="ddCap"><span class="top">🐌 오늘의 데일리 이벤트 — <b>미루 작가 달달이 특별전</b> 💙</span><em>사랑하는 우리 미루는 어딜 가든 잘 할거야! 너무 걱정마! 너무 멋져!! 항상 파이팅이얌</em><small>2026-07-23 하루 한정</small></div>`;
   document.body.appendChild(w);
 })();
