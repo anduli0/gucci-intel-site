@@ -1441,5 +1441,65 @@ async function pollRun(){
 function refreshAll(){ REP_CACHE.clear(); loadDash(); if(curTab==='rep')loadReports(); if(curTab==='sp')loadSpecial(); if(curTab==='news')loadNews(); if(curTab==='lux')loadLux(); if(curTab==='prod')loadProd(); if(curTab==='cal')loadCal(); if(curTab==='amb')loadAmb(); if(curTab==='cd')loadCd(); if(curTab==='guide')renderGuide(); pollRun(); }
 applyChrome(); renderGuide(); loadDash(); pollRun();
 </script>
+<!-- ===== 2026-07-23 데일리 이벤트: 미루 낙서 특별전 — 다음 업데이트(새 스냅샷) 배포 시 이 블록 통째로 삭제 ===== -->
+<script>
+(async function doodleDay(){
+  // 게이트: 2026-07-23 스냅샷이 살아있는 동안만 표시.
+  // 다음 업데이트가 배포되면 summary.date가 바뀌므로 저절로 사라짐.
+  let s=null;
+  try{ s=await (await fetch('api/summary')).json(); }catch(e){ return; }
+  if(!s || s.date!=='2026-07-23') return;
+
+  const css=`
+  .dd{position:fixed;pointer-events:none;z-index:88;opacity:0;
+      transform:rotate(var(--rot,0deg)) scale(var(--sc,1));
+      animation:ddin .6s ease forwards, ddfloat 5.5s ease-in-out 2.4s infinite alternate;
+      filter:drop-shadow(0 0 7px rgba(59,224,210,.35))}
+  .dd path{fill:none;stroke:#3be0d2;stroke-width:5.5;stroke-linecap:round;stroke-linejoin:round;
+      stroke-dasharray:760;stroke-dashoffset:760;animation:dddraw 2.4s ease-out forwards}
+  .dd circle{fill:#3be0d2;opacity:0;animation:ddin .4s ease 1.8s forwards}
+  .dd1{animation-delay:.2s,2.6s} .dd1 path{animation-delay:.2s}
+  .dd2{animation-delay:.9s,3.3s} .dd2 path{animation-delay:.9s}
+  .dd3{animation-delay:1.5s,3.9s} .dd3 path{animation-delay:1.5s}
+  .dd4{animation-delay:2.1s,4.5s} .dd4 path{animation-delay:2.1s}
+  .dd5{animation-delay:2.7s,5.1s} .dd5 path{animation-delay:2.7s}
+  @keyframes dddraw{to{stroke-dashoffset:0}}
+  @keyframes ddin{to{opacity:.92}}
+  @keyframes ddfloat{
+      from{transform:translateY(0) rotate(var(--rot,0deg)) scale(var(--sc,1))}
+      to{transform:translateY(-9px) rotate(var(--rot,0deg)) scale(var(--sc,1))}}
+  #ddCap{position:fixed;left:50%;bottom:16px;transform:translateX(-50%);z-index:89;pointer-events:none;
+      background:rgba(24,22,19,.92);border:1px solid var(--gold-dim);border-radius:20px;padding:7px 18px;
+      font-size:12px;color:var(--gold);letter-spacing:.08em;white-space:nowrap;
+      box-shadow:0 4px 18px rgba(0,0,0,.5);opacity:0;animation:ddin 1s ease 3.2s forwards}
+  #ddCap small{color:var(--ink-dim);letter-spacing:.04em;margin-left:8px}
+  #ddCap b{color:#3be0d2;font-weight:500}
+  @media (max-width:640px){ .dd{--sc:.72} .dd5{display:none}
+      #ddCap{font-size:11px;padding:6px 13px} }`;
+
+  const snail=`
+   <path d="M62 66 C62 44 80 28 100 30 C120 32 134 48 132 66 C130 84 114 96 97 94 C82 92 72 80 74 66 C76 53 87 45 99 47 C110 49 116 58 114 67 C112 76 104 81 97 79 C90 77 87 70 89 64"/>
+   <path d="M128 94 C104 106 62 106 46 96 C36 90 32 72 38 56"/>
+   <path d="M34 54 C30 44 24 38 18 32"/>
+   <path d="M42 52 C44 41 49 33 56 27"/>
+   <path d="M16 31 c-3 -5 -10 -1 -7 4 c2 3 5 4 7 7 c2 -3 5 -4 7 -7 c3 -5 -4 -9 -7 -4"/>
+   <path d="M58 26 c-3 -5 -10 -1 -7 4 c2 3 5 4 7 7 c2 -3 5 -4 7 -7 c3 -5 -4 -9 -7 -4"/>
+   <path d="M41 70 q6 5 12 1"/>
+   <circle cx="42" cy="62" r="2.6"/><circle cx="51" cy="60" r="2.6"/>`;
+  const heart=`
+   <path d="M55 88 C30 68 12 50 14 32 C16 14 40 12 52 26 C56 31 56 34 55 38 C56 34 58 30 62 26 C74 12 96 16 96 34 C96 52 78 68 55 88"/>`;
+
+  const st=document.createElement('style'); st.textContent=css; document.head.appendChild(st);
+  const w=document.createElement('div'); w.id='doodleDay';
+  w.innerHTML=`
+   <svg class="dd dd1" style="top:104px;right:4%;width:118px;--rot:-7deg" viewBox="0 0 150 115">${snail}</svg>
+   <svg class="dd dd2" style="top:36%;left:3%;width:76px;--rot:-12deg" viewBox="0 0 110 100">${heart}</svg>
+   <svg class="dd dd3" style="top:56%;right:16%;width:54px;--rot:14deg" viewBox="0 0 110 100">${heart}</svg>
+   <svg class="dd dd4" style="bottom:9%;left:5%;width:150px;--rot:5deg" viewBox="0 0 150 115">${snail}</svg>
+   <svg class="dd dd5" style="bottom:24%;right:5%;width:46px;--rot:-18deg" viewBox="0 0 110 100">${heart}</svg>
+   <div id="ddCap">🐌 오늘의 데일리 이벤트 — <b>미루 작가 낙서 특별전</b> 💙<small>2026-07-23 하루 한정</small></div>`;
+  document.body.appendChild(w);
+})();
+</script>
 </body>
 </html>
