@@ -1492,16 +1492,17 @@ applyChrome(); renderGuide(); loadDash(); pollRun();
    <path d="M84 91 C140 99 180 82 176 54 C173 32 148 22 126 28 C107 33 99 53 111 69 C118 78 132 79 139 68 C143 61 140 53 133 52"/>
    <circle cx="52" cy="58" r="3.2"/><circle cx="64" cy="56" r="3.2"/>`;
   const heart=`
-   <path d="M57 44 C50 24 30 22 24 40 C19 54 32 74 56 116 C88 72 110 48 105 28 C101 13 76 12 64 32"/>`;
+   <path d="M65 42 C58 24 30 22 26 40 C22 56 42 74 65 88 C76 98 85 108 92 118"/>
+   <path d="M65 42 C72 24 100 22 104 40 C108 56 88 74 65 88 C54 98 45 108 38 118"/>`;
 
   const st=document.createElement('style'); st.textContent=css; document.head.appendChild(st);
   const w=document.createElement('div'); w.id='doodleDay';
   w.innerHTML=`
    <svg class="dd dd1" style="top:100px;right:3%;width:150px;--rot:-7deg" viewBox="0 0 230 160">${snail}</svg>
-   <svg class="dd dd2" style="top:36%;left:3%;width:82px;--rot:-12deg" viewBox="0 0 120 130">${heart}</svg>
-   <svg class="dd dd3" style="top:56%;right:16%;width:58px;--rot:14deg" viewBox="0 0 120 130">${heart}</svg>
+   <svg class="dd dd2" style="top:36%;left:3%;width:82px;--rot:-12deg" viewBox="0 0 130 130">${heart}</svg>
+   <svg class="dd dd3" style="top:56%;right:16%;width:58px;--rot:14deg" viewBox="0 0 130 130">${heart}</svg>
    <svg class="dd dd4" style="bottom:8%;left:4%;width:190px;--rot:4deg" viewBox="0 0 230 160">${snail}</svg>
-   <svg class="dd dd5" style="bottom:24%;right:5%;width:50px;--rot:-18deg" viewBox="0 0 120 130">${heart}</svg>
+   <svg class="dd dd5" style="bottom:24%;right:5%;width:50px;--rot:-18deg" viewBox="0 0 130 130">${heart}</svg>
    <div id="ddCap"><span class="top">🐌 오늘의 데일리 이벤트 — <b>미루 작가 달달이 특별전</b> 💙</span><em>사랑하는 우리 미루는 어딜 가든 잘 할거야! 너무 걱정마! 너무 멋져!! 항상 파이팅이얌</em><small>2026-07-23 하루 한정</small></div>`;
   document.body.appendChild(w);
 })();
