@@ -1481,28 +1481,27 @@ applyChrome(); renderGuide(); loadDash(); pollRun();
       #ddCap{font-size:11px;padding:8px 15px} }`;
 
   const snail=`
-   <path d="M40 108 C88 128 150 130 182 118 C196 113 206 104 210 90"/>
-   <path d="M40 108 C28 96 27 77 43 67 C57 58 76 61 84 77"/>
-   <path d="M43 67 C39 51 49 41 63 43 C76 45 81 58 73 67"/>
-   <path d="M49 69 Q58 77 69 68"/>
-   <path d="M49 44 C44 31 41 23 39 16"/>
-   <path d="M65 44 C68 31 72 23 77 16"/>
-   <path d="M39 16 c-3.5 -4.5 -10 -1 -7 4.5 c1.3 2.4 4.4 4.4 7 6.5 c2.6 -2.1 5.7 -4.1 7 -6.5 c3 -5.5 -3.5 -9 -7 -4.5"/>
-   <path d="M77 16 c-3.5 -4.5 -10 -1 -7 4.5 c1.3 2.4 4.4 4.4 7 6.5 c2.6 -2.1 5.7 -4.1 7 -6.5 c3 -5.5 -3.5 -9 -7 -4.5"/>
-   <path d="M84 91 C140 99 180 82 176 54 C173 32 148 22 126 28 C107 33 99 53 111 69 C118 78 132 79 139 68 C143 61 140 53 133 52"/>
-   <circle cx="52" cy="58" r="3.2"/><circle cx="64" cy="56" r="3.2"/>`;
+   <path d="M40 138 C78 152 128 152 152 142 C162 138 168 131 170 122"/>
+   <path d="M40 138 C30 126 30 108 44 100 C56 93 72 97 78 110"/>
+   <path d="M44 100 C40 85 49 76 62 78 C74 80 78 92 70 100"/>
+   <path d="M48 101 Q57 109 67 100"/>
+   <path d="M48 78 C43 64 41 55 40 46"/>
+   <path d="M64 78 C67 64 70 55 74 46"/>
+   <path d="M40 46 c-3.5 -4.5 -10 -1 -7 4.5 c1.3 2.4 4.4 4.4 7 6.5 c2.6 -2.1 5.7 -4.1 7 -6.5 c3 -5.5 -3.5 -9 -7 -4.5"/>
+   <path d="M74 46 c-3.5 -4.5 -10 -1 -7 4.5 c1.3 2.4 4.4 4.4 7 6.5 c2.6 -2.1 5.7 -4.1 7 -6.5 c3 -5.5 -3.5 -9 -7 -4.5"/>
+   <path d="M78 120 C140 128 172 92 164 56 C158 28 128 14 100 24 C78 32 70 62 88 84 C99 97 124 96 132 76 C136 66 132 57 122 56"/>
+   <circle cx="50" cy="90" r="3"/><circle cx="62" cy="88" r="3"/>`;
   const heart=`
-   <path d="M65 42 C58 24 30 22 26 40 C22 56 42 74 65 88 C76 98 85 108 92 118"/>
-   <path d="M65 42 C72 24 100 22 104 40 C108 56 88 74 65 88 C54 98 45 108 38 118"/>`;
+   <path d="M20 126 C38 108 54 98 68 86 C94 70 116 48 110 28 C106 13 78 18 68 44 C60 20 32 18 28 38 C23 57 44 72 68 86 C82 100 98 112 116 126"/>`;
 
   const st=document.createElement('style'); st.textContent=css; document.head.appendChild(st);
   const w=document.createElement('div'); w.id='doodleDay';
   w.innerHTML=`
-   <svg class="dd dd1" style="top:100px;right:3%;width:150px;--rot:-7deg" viewBox="0 0 230 160">${snail}</svg>
-   <svg class="dd dd2" style="top:36%;left:3%;width:82px;--rot:-12deg" viewBox="0 0 130 130">${heart}</svg>
-   <svg class="dd dd3" style="top:56%;right:16%;width:58px;--rot:14deg" viewBox="0 0 130 130">${heart}</svg>
-   <svg class="dd dd4" style="bottom:8%;left:4%;width:190px;--rot:4deg" viewBox="0 0 230 160">${snail}</svg>
-   <svg class="dd dd5" style="bottom:24%;right:5%;width:50px;--rot:-18deg" viewBox="0 0 130 130">${heart}</svg>
+   <svg class="dd dd1" style="top:96px;right:3%;width:132px;--rot:-7deg" viewBox="0 0 190 170">${snail}</svg>
+   <svg class="dd dd2" style="top:35%;left:3%;width:86px;--rot:-12deg" viewBox="0 0 140 135">${heart}</svg>
+   <svg class="dd dd3" style="top:55%;right:15%;width:60px;--rot:14deg" viewBox="0 0 140 135">${heart}</svg>
+   <svg class="dd dd4" style="bottom:7%;left:4%;width:168px;--rot:4deg" viewBox="0 0 190 170">${snail}</svg>
+   <svg class="dd dd5" style="bottom:23%;right:5%;width:52px;--rot:-18deg" viewBox="0 0 140 135">${heart}</svg>
    <div id="ddCap"><span class="top">🐌 오늘의 데일리 이벤트 — <b>미루 작가 달달이 특별전</b> 💙</span><em>사랑하는 우리 미루는 어딜 가든 잘 할거야! 너무 걱정마! 너무 멋져!! 항상 파이팅이얌</em><small>2026-07-23 하루 한정</small></div>`;
   document.body.appendChild(w);
 })();
