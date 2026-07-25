@@ -1,0 +1,56 @@
+name: verify-freshness
+
+# 매일 08:20 KST: 사이트가 오늘자로 업데이트·배포됐는지 검증하는 안전망.
+#  - 리포는 최신인데 라이브 배포만 실패한 경우 → pages.yml 새 실행을 자동 트리거해 복구
+#  - 리포 자체가 오늘자가 아닌 경우(클라우드 업데이트 누락) → 실패 처리 → GitHub이 소유자에게 실패 메일 발송
+on:
+  schedule:
+    - cron: "20 23 * * *" # 08:20 KST
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+  actions: write
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check repo & live freshness
+        id: check
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -e
+          TODAY=$(TZ=Asia/Seoul date +%F)
+          REPO_DATE=$(python3 -c "import json; print(json.load(open('api/summary'))['date'])")
+          LIVE_DATE=$(curl -sf --max-time 30 "https://anduli0.github.io/gucci-intel-site/api/summary?cb=$RANDOM" \
+            | python3 -c "import json,sys; print(json.load(sys.stdin)['date'])" || echo "unreachable")
+          echo "today=$TODAY repo=$REPO_DATE live=$LIVE_DATE"
+          echo "today=$TODAY" >> "$GITHUB_OUTPUT"
+          echo "repo_date=$REPO_DATE" >> "$GITHUB_OUTPUT"
+          echo "live_date=$LIVE_DATE" >> "$GITHUB_OUTPUT"
+
+          if [ "$LIVE_DATE" = "$TODAY" ]; then
+            echo "OK: 라이브 사이트가 오늘자."
+            exit 0
+          fi
+
+          if [ "$REPO_DATE" = "$TODAY" ]; then
+            echo "리포는 오늘자인데 라이브가 뒤처짐 → pages 배포 재실행"
+            gh workflow run pages.yml --repo "$GITHUB_REPOSITORY" --ref main
+            for i in 1 2 3 4 5 6; do
+              sleep 30
+              LIVE_DATE=$(curl -sf --max-time 30 "https://anduli0.github.io/gucci-intel-site/api/summary?cb=$RANDOM" \
+                | python3 -c "import json,sys; print(json.load(sys.stdin)['date'])" || echo "unreachable")
+              echo "recheck $i: live=$LIVE_DATE"
+              [ "$LIVE_DATE" = "$TODAY" ] && { echo "복구 완료"; exit 0; }
+            done
+            echo "::error::배포 재실행 후에도 라이브가 오늘자가 아님 (live=$LIVE_DATE)"
+            exit 1
+          fi
+
+          echo "::error::오늘자 업데이트 누락: repo=$REPO_DATE, live=$LIVE_DATE (클라우드 정기/보정 실행이 모두 실패한 것으로 보임)"
+          exit 1
