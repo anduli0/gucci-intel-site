@@ -304,7 +304,7 @@ html.xmas header{background:linear-gradient(180deg,rgba(122,14,20,.55),rgba(122,
 html.xmas header h1{color:var(--gold);text-shadow:0 0 18px rgba(220,184,113,.25)}
 html.xmas .xm-badge{display:inline-flex;align-items:center;gap:8px;margin-left:14px;padding:4px 12px 4px 9px;border:1px solid var(--gold-dim);border-radius:999px;
   font-size:10.5px;letter-spacing:.3em;color:var(--gold);background:linear-gradient(180deg,rgba(14,58,41,.8),rgba(14,58,41,.4));vertical-align:middle;white-space:nowrap}
-html.xmas .xm-badge svg{width:54px;height:19px;flex:none}
+html.xmas .xm-badge svg{width:56px;height:20px;flex:none}
 /* header ornaments: engraved Santa+sleigh (right) and stocking (left) in dead space */
 html.xmas .xm-hdr-art{position:absolute;bottom:-1px;pointer-events:none;opacity:.85;width:auto}
 html.xmas .xm-hdr-art.l{left:26px;height:34px}
@@ -1552,30 +1552,22 @@ applyChrome(); renderGuide(); loadDash(); pollRun();
   root.classList.add('xmas');
   const G = '#dcb871';
   // --- Horsebit: two stirrup rings (flattened ovals, open at the bar) joined by a bar with a centre link.
-  const BIT = '<svg viewBox="0 0 96 34" aria-hidden="true">'
-    + '<defs><linearGradient id="xmGold" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f3dfa6"/><stop offset=".5" stop-color="#d6ad5e"/><stop offset="1" stop-color="#a7843f"/></linearGradient></defs>'
-    // left D-stirrup: flat inner edge at x=34, rounded outer; drawn as thick stroked path (ring width 5)
-    + '<path d="M34 7.5H22C13.5 7.5 7 11.8 7 17s6.5 9.5 15 9.5h12" fill="none" stroke="url(#xmGold)" stroke-width="5" stroke-linejoin="round"/>'
-    + '<path d="M34 7.5H22C13.5 7.5 7 11.8 7 17s6.5 9.5 15 9.5h12" fill="none" stroke="#5a4418" stroke-width="5.8" stroke-linejoin="round" opacity=".35" transform="translate(0 .8)" style="mix-blend-mode:multiply"/>'
-    + '<path d="M34 7.5H22C13.5 7.5 7 11.8 7 17s6.5 9.5 15 9.5h12" fill="none" stroke="url(#xmGold)" stroke-width="5" stroke-linejoin="round"/>'
-    // right D-stirrup (mirror)
-    + '<path d="M62 7.5h12c8.5 0 15 4.3 15 9.5s-6.5 9.5-15 9.5H62" fill="none" stroke="url(#xmGold)" stroke-width="5" stroke-linejoin="round"/>'
-    // flat inner uprights of the D (the "stirrup" edge)
-    + '<rect x="31.5" y="5" width="5" height="24" rx="1.2" fill="url(#xmGold)"/><rect x="59.5" y="5" width="5" height="24" rx="1.2" fill="url(#xmGold)"/>'
-    // connecting bar through both uprights
-    + '<rect x="34" y="14.5" width="28" height="5" rx="1" fill="url(#xmGold)"/>'
-    // raised centre link (the small oblong at the middle of the bar)
-    + '<rect x="43" y="11.5" width="10" height="11" rx="2.2" fill="url(#xmGold)" stroke="#5a4418" stroke-width=".7"/>'
-    + '<rect x="45" y="13.5" width="6" height="7" rx="1.2" fill="none" stroke="#5a4418" stroke-width=".7" opacity=".7"/>'
-    // specular highlights
-    + '<path d="M11 13.5c2-3 6-4.5 10-4.5M85 13.5c-2-3-6-4.5-10-4.5" fill="none" stroke="#fff6dc" stroke-width="1.1" stroke-linecap="round" opacity=".8"/>'
+  const BIT = '<svg viewBox="0 0 100 36" aria-hidden="true">'
+    + '<defs><linearGradient id="xmGold" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f6e4ad"/><stop offset=".45" stop-color="#d9b062"/><stop offset="1" stop-color="#9f7c38"/></linearGradient>'
+    + '<linearGradient id="xmGoldH" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#b58e45"/><stop offset=".5" stop-color="#f1d896"/><stop offset="1" stop-color="#b58e45"/></linearGradient></defs>'
+    + '<path fill-rule="evenodd" fill="url(#xmGold)" stroke="#5a4418" stroke-width=".6" stroke-linejoin="miter" d="M36 4H25L19 6.2C11.5 8 5 12.2 5 18s6.5 10 14 11.8L25 32h11v-4.6H25.6l-5.4-1.6C14 24.4 10 21.6 10 18s4-6.4 10.2-7.8L25.6 8.6H36z"/>'
+    + '<path fill-rule="evenodd" fill="url(#xmGold)" stroke="#5a4418" stroke-width=".6" stroke-linejoin="miter" d="M64 4h11l6 2.2C88.5 8 95 12.2 95 18s-6.5 10-14 11.8L75 32H64v-4.6h10.4l5.4-1.6C86 24.4 90 21.6 90 18s-4-6.4-10.2-7.8L74.4 8.6H64z"/>'
+    + '<rect x="35" y="15.3" width="30" height="5.4" rx=".8" fill="url(#xmGoldH)" stroke="#5a4418" stroke-width=".6"/>'
+    + '<rect x="44.5" y="11.8" width="11" height="12.4" rx="3" fill="url(#xmGold)" stroke="#5a4418" stroke-width=".7"/>'
+    + '<rect x="47" y="14.3" width="6" height="7.4" rx="1.8" fill="#2a1114" stroke="#5a4418" stroke-width=".5"/>'
+    + '<path d="M9.5 14.5c2-3.2 6-5.2 10.5-6.2M90.5 14.5c-2-3.2-6-5.2-10.5-6.2" fill="none" stroke="#fff8e4" stroke-width="1.1" stroke-linecap="round" opacity=".85"/>'
     + '</svg>';
   // --- Line-art ornaments (1px gold engraving style)
   const S = 'fill="none" stroke="' + G + '" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"';
   const TREE = '<svg viewBox="0 0 60 76" ' + S + '>'
-    + '<path d="M30 4l-9 13h5l-9 12h6l-10 13h34L37 29h6l-9-12h5z"/>'                      // three tiers
+    + '<path d="M30 9l-9 12h5l-9 11h6l-10 12h34L37 32h6l-9-11h5z"/>'                      // three tiers (under the star)
     + '<path d="M26 42v8h8v-8"/><rect x="24" y="50" width="12" height="4" rx="1" fill="#7a0e14" stroke="#7a0e14"/>'  // trunk + pot
-    + '<path d="M30 4l1.6-2.2M30 4l-1.6-2.2M30 4V1.4M28.4 3.2l3.2 0" stroke-width="1"/>'  // star
+    + '<path d="M30 .8l1.55 3.25 3.55.45-2.6 2.45.7 3.55L30 8.8l-3.2 1.7.7-3.55-2.6-2.45 3.55-.45z" fill="' + G + '" stroke="' + G + '" stroke-width=".6" stroke-linejoin="round"/>'  // five-point star
     + '<path d="M22 19c4 2 12 2 16 0M18 30c6 3 18 3 24 0M14 41c8 4 24 4 32 0" stroke-dasharray="2.2 2.6" opacity=".8"/>'  // garland swags
     + '<circle cx="27" cy="23" r="1.6" fill="#d41f2a" stroke="#d41f2a"/><circle cx="35" cy="34" r="1.6" fill="' + G + '"/><circle cx="23" cy="36" r="1.5" fill="#fbf6ee" stroke="#fbf6ee"/><circle cx="33" cy="14" r="1.3" fill="' + G + '"/>'
     + '<rect x="12" y="54" width="9" height="7" rx="1" fill="#d41f2a" stroke="#7a0e14"/><path d="M16.5 54v7M12 57.5h9" stroke="' + G + '" stroke-width="1"/>'   // gifts under the tree
@@ -1587,7 +1579,7 @@ applyChrome(); renderGuide(); loadDash(); pollRun();
     + '<path d="M8 30c4 3 10 3 14 0M20 30h40v-7c0-5 4-9 9-9h6l5 16h20"/><path d="M60 30c4 3 10 3 14 0M80 30c4 3 10 3 14 0" opacity=".7"/>'   // sleigh runners + body
     + '<circle cx="42" cy="16" r="4"/><path d="M38 20c-4 1-6 4-6 7h16c0-3-2-6-6-7M38 13c0-4 3-6 6-5l-1 5" stroke-width="1.1"/>'  // Santa head/hat/body
     + '<path d="M60 22c8-2 20-3 30-2" stroke-dasharray="2 3" opacity=".6"/>'                                                       // reins
-    + '<path d="M96 30l6-9 6 1 4-7 10 2 4 7 8 1 4 7M102 21l-2 9M118 15l-5 15M112 15l3-9m-3 9l-6-6M127 17l2-9m-2 9l6-6" />'           // reindeer body/legs/antlers
+    + '<path d="M96 30l6-9 6 1 4-7 10 2 4 7 8 1 4 7M102 21l-2 9M118 15l-5 15M112 15l3-9m-3 9l-6-6M127 17l2-9m-2 9l6-6" stroke="#b07a44" />'           // reindeer (brown)
     + '<circle cx="133" cy="19" r="2" fill="#c8202c" stroke="none"/><circle cx="133" cy="19" r="2.6"/>'                             // Rudolph nose
     + '</svg>';
   // vertical sleigh for the page scrollbar: Rudolph at the top, Santa below, 30x92 box
@@ -1595,14 +1587,17 @@ applyChrome(); renderGuide(); loadDash(); pollRun();
   // (antlers spreading forward/up, red nose at the tip, back + four legs), reins, then the sleigh
   // from above (curved dash, runners both sides, Santa's hat crown + shoulders, sack behind).
   const SLEIGH_V = '<svg viewBox="0 0 36 116" aria-hidden="true">'
-    + '<g fill="none" stroke="' + G + '" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">'
-    + '<path d="M14 14c-4-3-7-7-7-12M14 14c-2-2-6-3-9-2M14 14c-1-3-4-6-5-9"/><path d="M22 14c4-3 7-7 7-12M22 14c2-2 6-3 9-2M22 14c1-3 4-6 5-9"/>'  // antlers from above
+    + '<g fill="none" stroke="#5c3a17" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">'
+    + '<path d="M14 14c-4-3-7-7-7-12M14 14c-2-2-6-3-9-2M14 14c-1-3-4-6-5-9"/><path d="M22 14c4-3 7-7 7-12M22 14c2-2 6-3 9-2M22 14c1-3 4-6 5-9"/>'  // antlers (dark brown)
+    + '</g>'
+    + '<g fill="#8a5a2b" stroke="#5c3a17" stroke-width=".6" stroke-linejoin="round">'
+    + '<path d="M18 7c-3.2 0-5.5 2.6-5.5 6.2 0 2.4 1 4.2 2.5 5.3V22h6v-3.5c1.5-1.1 2.5-2.9 2.5-5.3C23.5 9.6 21.2 7 18 7z"/>'   // head, brown
+    + '<path d="M12 23h12l1.5 20h-15z"/>'                                                                                   // back, brown
+    + '<path d="M14 26h8l1 14h-10z" fill="#b07a44" stroke="none" opacity=".7"/>'                                             // lighter dorsal stripe
+    + '<path d="M11.5 25l-4 2M24.5 25l4 2M11.5 41l-4 2M24.5 41l4 2" stroke="#5c3a17" stroke-width="2.6" stroke-linecap="round" fill="none"/>'  // legs
+    + '<circle cx="18" cy="7.5" r="3.2" fill="#d41f2a" stroke="#7a0e14"/><circle cx="17" cy="6.6" r=".9" fill="#fff" opacity=".7"/>'  // red nose + glint
     + '</g>'
     + '<g fill="' + G + '" stroke="#2a0b0d" stroke-width=".6" stroke-linejoin="round">'
-    + '<path d="M18 7c-3.2 0-5.5 2.6-5.5 6.2 0 2.4 1 4.2 2.5 5.3V22h6v-3.5c1.5-1.1 2.5-2.9 2.5-5.3C23.5 9.6 21.2 7 18 7z"/>'   // head (top view)
-    + '<path d="M12 23h12l1.5 20h-15z"/>'                                                                                   // back
-    + '<path d="M11.5 25l-4 2M24.5 25l4 2M11.5 41l-4 2M24.5 41l4 2" stroke="' + G + '" stroke-width="2.6" stroke-linecap="round" fill="none"/>'  // legs out to the sides
-    + '<circle cx="18" cy="7.5" r="3.2" fill="#d41f2a" stroke="#7a0e14"/>'                                                  // nose at the tip
     + '<path d="M18 44v8" stroke="' + G + '" stroke-width="1.2" stroke-dasharray="1.6 1.6" fill="none"/>'                  // reins
     + '<path d="M7 56c0-4 4-5 11-5s11 1 11 5v44c0 4-4 6-11 6S7 104 7 100z"/>'                                               // sleigh seen from above
     + '<path d="M2.5 54v48c0 3 1.5 5 4 5M33.5 54v48c0 3-1.5 5-4 5" fill="none" stroke="' + G + '" stroke-width="2" stroke-linecap="round"/>'  // runners L/R
