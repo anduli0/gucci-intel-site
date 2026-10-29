@@ -419,7 +419,7 @@ const STR = {
            region_drop:(r,d)=>`${r} 권역 지수가 하루 만에 ${d}pt 하락 — 급락 원인 분석이 필요함.`,
            global_delta:(d)=>`글로벌 지수가 하루 만에 ${d>0?'+':''}${d}pt 변동 — 원인 분석이 필요함.`},
     gmaiNote:'GMAI = 구찌 시장 매력 지수(0~100). 여론 감성 45% + 화제도 20% + 참여 깊이 15% + 브랜드 점유 20%를 매일 가중 합산한 값이며, 카드의 작은 막대는 각 성분(0~100)임. 산식과 판정 기준은 지수 가이드 탭 참조.',
-    sovSrc:{objective:'대칭 검색 기반 객관 집계', 'collection-derived':'수집 풀 기반(편향 가능) — 객관 집계 대기 중'},
+    sovSrc:{objective:'대칭 검색 기반 객관 집계', 'collection-derived':'수집 풀 기반(편향 가능) — 객관 집계 대기 중', 'missing-neutral':'객관 집계 없음 — 중립값 적용'},
     gap:'권역 격차 분해 — 왜 점수가 다른가', gapCols:['권역','감성 기여','화제 기여','참여 기여','점유 기여','지수','글로벌 대비'],
     gapNote:'네 성분의 점수 기여(합계=지수)를 그대로 분해한 값. 글로벌 대비 열에서 가장 큰 항목이 그 권역 격차의 주범이며, 괄호 안이 해당 성분.',
     gapDrv:{sentiment:'감성',buzz:'화제',engagement:'참여',sov:'점유'},
@@ -504,7 +504,7 @@ const STR = {
            region_drop:(r,d)=>`${r} block dropped ${d}pt in a day — root-cause analysis required.`,
            global_delta:(d)=>`Global index moved ${d>0?'+':''}${d}pt in a day — root-cause analysis required.`},
     gmaiNote:'GMAI = Gucci Market Attractiveness Index (0-100): daily weighted blend of sentiment 45% + buzz 20% + engagement 15% + share-of-voice 20%. The small bars are the components (0-100). Formula and bands: see the Index Guide tab.',
-    sovSrc:{objective:'objective symmetric-search counts', 'collection-derived':'collection-derived (may be biased) — awaiting objective audit'},
+    sovSrc:{objective:'objective symmetric-search counts', 'collection-derived':'collection-derived (may be biased) — awaiting objective audit', 'missing-neutral':'no objective count — neutral value applied'},
     gap:'Regional Gap Decomposition — why scores differ', gapCols:['Region','Sentiment pts','Buzz pts','Engagement pts','SOV pts','Index','vs Global'],
     gapNote:'Each component\'s point contribution (they sum to the index). The largest item in the vs-Global column is that region\'s main gap driver (component in parentheses).',
     gapDrv:{sentiment:'sentiment',buzz:'buzz',engagement:'engagement',sov:'SOV'},
@@ -990,7 +990,7 @@ async function loadCal(){
       return `<div class="calitem">
         <div class="cd">${esc(it.date||'')}<small>D${dday(it.date)}</small></div>
         <div class="ct">
-          <div class="ce">${esc(it.brand?it.brand+' — ':'')}${esc(it.event||'')}<span class="typeb ty-${ty}">${t().calTypes[ty]||ty}</span></div>
+          <div class="ce">${esc(it.brand?it.brand+' — ':'')}${esc(LANG==='en'?(it.event_en||it.event||''):(it.event||it.event_en||''))}<span class="typeb ty-${ty}">${t().calTypes[ty]||ty}</span></div>
           <div class="cw">${esc(why)}</div>
           ${it.action_ko&&LANG==='ko'?`<div class="ca">${t().calAct}${esc(it.action_ko)}</div>`:''}
           ${it.action_ko&&LANG==='en'?`<div class="ca">${t().calAct}${esc(it.action_en||it.action_ko)}</div>`:''}
@@ -1148,7 +1148,7 @@ function renderLux(){
       <div class="top"><span class="brand">${esc(it.brand||'')}</span>
         <span class="etype">${esc(it.event_type||'')}</span>
         <span class="tag ${cls}">${esc(ko)}</span></div>
-      <div class="hd">${esc(it.headline||'')}${updB(it.published_at)}</div>
+      <div class="hd">${esc(LANG==='en'?(it.headline_en||it.headline||''):(it.headline||it.headline_en||''))}${updB(it.published_at)}</div>
       ${why?`<div class="why">${t().gucciView}${esc(why)}</div>`:''}
       <div class="src">${esc(it.source||'')} ${it.tier?'· '+esc(it.tier):''} ${it.published_at?'· '+esc(it.published_at):''}
         ${it.url?` · <a href="${esc(it.url)}" target="_blank">${t().orig}</a>`:''}</div>
@@ -1160,7 +1160,7 @@ function renderLux(){
       + kp.map(it=>{
         const why = LANG==='en' ? (it.why_it_matters_en||it.why_it_matters||'') : (it.why_it_matters||it.why_it_matters_en||'');
         return `<div class="luxitem" style="opacity:.85"><div class="top"><span class="brand">${esc(it.brand||'')}</span><span class="etype">${esc(it.published_at||'')}</span></div>
-          <div class="hd">${esc(it.headline||'')}</div>
+          <div class="hd">${esc(LANG==='en'?(it.headline_en||it.headline||''):(it.headline||it.headline_en||''))}</div>
           ${why?`<div class="why">${t().gucciView}${esc(why)}</div>`:''}
           <div class="src">${esc(it.source||'')}${it.url?` · <a href="${esc(it.url)}" target="_blank">${t().orig}</a>`:''}</div></div>`;}).join('');
   }
