@@ -963,10 +963,10 @@ function renderProd(){
       <div class="pbody">
         <span class="plabel pl-${lb}">${t().prodLabels[lb]||esc(it.label||'')}</span>
         <div class="pname">${esc(it.name||'')}${it.price?` <span style="font-family:var(--num);font-size:13px;color:var(--gold)">· ${esc(it.price)}</span>`:''}</div>
-        <div class="pline">${esc(it.line||'')}${it.image_note?' · '+esc(it.image_note):''}</div>
+        <div class="pline">${esc(it.line||'')}${(LANG==='en'?it.image_note_en:it.image_note)?' · '+esc(LANG==='en'?it.image_note_en:it.image_note):''}</div>
         <div class="pwhy">${esc(why)}</div>
         ${it.evidence_ko&&LANG==='ko'?`<div class="pev">${t().prodEvPre}${esc(it.evidence_ko)}</div>`:''}
-        ${it.evidence_ko&&LANG==='en'?`<div class="pev">${t().prodEvPre}${esc(it.evidence_en||it.evidence_ko)}</div>`:''}
+        ${it.evidence_en&&LANG==='en'?`<div class="pev">${t().prodEvPre}${esc(it.evidence_en)}</div>`:''}
         <div class="psrc">${esc(it.source||'')}${it.published_at?' · '+esc(it.published_at):''}
           ${it.product_url?` · <a href="${esc(it.product_url)}" target="_blank">${t().prodPage}</a>`:''}
           ${it.source_url?` · <a href="${esc(it.source_url)}" target="_blank">${t().orig}</a>`:''}</div>
@@ -993,7 +993,7 @@ async function loadCal(){
           <div class="ce">${esc(it.brand?it.brand+' — ':'')}${esc(LANG==='en'?(it.event_en||it.event||''):(it.event||it.event_en||''))}<span class="typeb ty-${ty}">${t().calTypes[ty]||ty}</span></div>
           <div class="cw">${esc(why)}</div>
           ${it.action_ko&&LANG==='ko'?`<div class="ca">${t().calAct}${esc(it.action_ko)}</div>`:''}
-          ${it.action_ko&&LANG==='en'?`<div class="ca">${t().calAct}${esc(it.action_en||it.action_ko)}</div>`:''}
+          ${it.action_en&&LANG==='en'?`<div class="ca">${t().calAct}${esc(it.action_en)}</div>`:''}
           <div class="cs">${esc(it.source||'')}${it.tier?' · '+esc(it.tier):''}${it.url?` · <a href="${esc(it.url)}" target="_blank">${t().orig}</a>`:''}</div>
         </div></div>`;
     }).join('');
