@@ -319,23 +319,14 @@ html.xmas body{
     radial-gradient(1200px 520px at 50% -140px,rgba(163,18,28,.42),transparent 70%),
     radial-gradient(900px 600px at 110% 40%,rgba(14,58,41,.30),transparent 70%),
     radial-gradient(900px 600px at -10% 75%,rgba(14,58,41,.24),transparent 70%),
-    repeating-linear-gradient(45deg,rgba(220,184,113,.06) 0 1px,transparent 1px 22px),
-    repeating-linear-gradient(-45deg,rgba(220,184,113,.06) 0 1px,transparent 1px 22px),
-    radial-gradient(circle at 11px 11px,rgba(220,184,113,.10) 0 1px,transparent 1.5px);
-  background-size:auto,auto,auto,auto,auto,22px 22px;
-  background-attachment:fixed,fixed,fixed,scroll,scroll,scroll;
+    repeating-linear-gradient(45deg,rgba(220,184,113,.045) 0 1px,transparent 1px 22px),
+    repeating-linear-gradient(-45deg,rgba(220,184,113,.045) 0 1px,transparent 1px 22px);
+  background-attachment:fixed,fixed,fixed,scroll,scroll;
 }
-html.xmas .card,html.xmas .panel{border-left:0;position:relative}
-html.xmas .card::before,html.xmas .panel::before{content:"";position:absolute;left:0;top:0;bottom:0;width:7px;border-radius:10px 0 0 10px;
-  background:linear-gradient(90deg,#175e3d 0 34%,#a3121c 34% 66%,#175e3d 66% 100%);box-shadow:inset -1px 0 0 rgba(220,184,113,.5)}
-html.xmas .card{padding-left:22px}
-html.xmas .panel{padding-left:24px}
-html.xmas .panel h2{margin:-16px -18px 12px -24px;padding:10px 18px 9px 24px;background:linear-gradient(180deg,#134a33,#0e3a29);border-bottom:1px solid var(--gold-dim);border-radius:10px 10px 0 0;color:var(--gold-ink);letter-spacing:.3em}
+html.xmas .panel h2{margin:-16px -18px 12px -18px;padding:10px 18px 9px 18px;background:linear-gradient(180deg,#134a33,#0e3a29);border-bottom:1px solid var(--gold-dim);border-radius:10px 10px 0 0;color:var(--gold-ink);letter-spacing:.3em}
 html.xmas .panel h2::before{margin-left:0}
-html.xmas h2.sec{padding:6px 0 6px 12px;border-left:3px solid var(--gold);background:linear-gradient(90deg,rgba(14,58,41,.6),transparent 70%);border-radius:2px}
+html.xmas h2.sec{padding:2px 0 2px 10px;border-left:2px solid var(--gold-dim)}
 html.xmas nav button.on{border-bottom:0;box-shadow:none;background:linear-gradient(0deg,#175e3d 0 2px,#a3121c 2px 4px,#175e3d 4px 6px,transparent 6px);padding-bottom:12px}
-html.xmas .langtog{background:linear-gradient(180deg,#134a33,#0e3a29)}
-html.xmas button.ghost{background:linear-gradient(180deg,#134a33,#0e3a29);color:var(--gold-ink)}
 html.xmas .b-강한매력{background:#0e3a29;color:#8fe3b4;border:1px solid #2a7a52}.b-우호{}
 html.xmas .replist .repdate{border-left:3px solid var(--gold-dim);padding-left:10px}
 html.xmas .replist .repdate.open{border-left-color:#a3121c}
@@ -343,16 +334,10 @@ html.xmas .replist .item.on{background:linear-gradient(90deg,rgba(163,18,28,.35)
 html.xmas .repview h1m{color:var(--gold-ink);padding-bottom:8px;border-bottom:1px solid var(--gold-dim);
   background:linear-gradient(90deg,#175e3d 0 34%,#a3121c 34% 66%,#175e3d 66% 100%) no-repeat left bottom/120px 3px}
 html.xmas .repview h2m{color:var(--gold-ink)}
-html.xmas .repview h2m::before{content:"";display:inline-block;width:14px;height:3px;margin:0 8px 4px 0;vertical-align:middle;background:linear-gradient(90deg,#175e3d 0 34%,#a3121c 34% 66%,#175e3d 66% 100%)}
 html.xmas footer{background:linear-gradient(0deg,#0e3a29,rgba(14,58,41,.35) 60%,transparent)}
-html.xmas footer::before{content:"";display:block;height:6px;margin:-20px -26px 18px;background:linear-gradient(90deg,#175e3d 0 34%,#a3121c 34% 66%,#175e3d 66% 100%)}
 @media (max-width:640px){
-  html.xmas .card{padding-left:20px}
   html.xmas .cards .card:first-child::after{width:52px;height:64px;right:10px;bottom:8px;opacity:.75}
   html.xmas .cards .card:first-child .gauge{margin-right:62px}
-  html.xmas .panel{padding-left:22px}
-  html.xmas .panel h2{margin:-16px -18px 12px -22px;padding-left:22px}
-  html.xmas footer::before{margin:-20px -14px 16px}
 }
 html.xmas .card{background:linear-gradient(165deg,#2a1013,#170809 60%,#12100b);border:1px solid #5a2a24;box-shadow:inset 0 1px 0 rgba(220,184,113,.18);position:relative}
 html.xmas .card:hover{border-color:var(--gold-dim)}
@@ -360,7 +345,7 @@ html.xmas .card h3{color:var(--gold-dim)}
 html.xmas .cards .card:first-child::after{content:"";position:absolute;right:14px;bottom:12px;width:78px;height:96px;background:var(--xm-tree) no-repeat center/contain;opacity:.9;pointer-events:none}
 html.xmas .panel,html.xmas .repview,html.xmas .replist{background:linear-gradient(180deg,rgba(43,17,20,.92),rgba(24,9,11,.92));border-color:#4f2226;box-shadow:inset 0 1px 0 rgba(220,184,113,.12)}
 html.xmas h2.sec,html.xmas .panel h2{color:var(--gold)}
-html.xmas h2.sec::before,html.xmas .panel h2::before{content:"";display:inline-block;width:30px;height:13px;margin:0 9px 2px 0;background:var(--xm-bit) no-repeat center/contain;vertical-align:middle}
+html.xmas .panel h2::before{content:"";display:inline-block;width:26px;height:11px;margin:0 9px 2px 0;background:var(--xm-bit) no-repeat center/contain;vertical-align:middle}
 html.xmas .bar i{background:linear-gradient(90deg,var(--gold-dim),var(--gold))}
 html.xmas .langtog,html.xmas button.ghost{border-color:var(--gold-dim)}
 html.xmas .langtog button.on{background:var(--rosso);color:var(--gold)}
