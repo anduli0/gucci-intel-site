@@ -304,7 +304,7 @@ html.xmas header{background:linear-gradient(180deg,rgba(122,14,20,.55),rgba(122,
 html.xmas header h1{color:var(--gold);text-shadow:0 0 18px rgba(220,184,113,.25)}
 html.xmas .xm-badge{display:inline-flex;align-items:center;gap:8px;margin-left:14px;padding:4px 12px 4px 9px;border:1px solid var(--gold-dim);border-radius:999px;
   font-size:10.5px;letter-spacing:.3em;color:var(--gold);background:linear-gradient(180deg,rgba(14,58,41,.8),rgba(14,58,41,.4));vertical-align:middle;white-space:nowrap}
-html.xmas .xm-badge svg{width:56px;height:20px;flex:none}
+html.xmas .xm-badge svg{width:60px;height:26px;flex:none}
 /* header ornaments: engraved Santa+sleigh (right) and stocking (left) in dead space */
 html.xmas .xm-hdr-art{position:absolute;bottom:-1px;pointer-events:none;opacity:.85;width:auto}
 html.xmas .xm-hdr-art.l{left:26px;height:34px}
@@ -319,7 +319,7 @@ html.xmas .card h3{color:var(--gold-dim)}
 html.xmas .cards .card:first-child::after{content:"";position:absolute;right:14px;bottom:12px;width:78px;height:96px;background:var(--xm-tree) no-repeat center/contain;opacity:.9;pointer-events:none}
 html.xmas .panel,html.xmas .repview,html.xmas .replist{background:linear-gradient(180deg,rgba(43,17,20,.92),rgba(24,9,11,.92));border-color:#4f2226;box-shadow:inset 0 1px 0 rgba(220,184,113,.12)}
 html.xmas h2.sec,html.xmas .panel h2{color:var(--gold)}
-html.xmas h2.sec::before,html.xmas .panel h2::before{content:"";display:inline-block;width:24px;height:9px;margin:0 9px 2px 0;background:var(--xm-bit) no-repeat center/contain;vertical-align:middle}
+html.xmas h2.sec::before,html.xmas .panel h2::before{content:"";display:inline-block;width:30px;height:13px;margin:0 9px 2px 0;background:var(--xm-bit) no-repeat center/contain;vertical-align:middle}
 html.xmas .bar i{background:linear-gradient(90deg,var(--gold-dim),var(--gold))}
 html.xmas .langtog,html.xmas button.ghost{border-color:var(--gold-dim)}
 html.xmas .langtog button.on{background:var(--rosso);color:var(--gold)}
@@ -1552,15 +1552,16 @@ applyChrome(); renderGuide(); loadDash(); pollRun();
   root.classList.add('xmas');
   const G = '#dcb871';
   // --- Horsebit: two stirrup rings (flattened ovals, open at the bar) joined by a bar with a centre link.
-  const BIT = '<svg viewBox="0 0 100 36" aria-hidden="true">'
-    + '<defs><linearGradient id="xmGold" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f6e4ad"/><stop offset=".45" stop-color="#d9b062"/><stop offset="1" stop-color="#9f7c38"/></linearGradient>'
-    + '<linearGradient id="xmGoldH" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#b58e45"/><stop offset=".5" stop-color="#f1d896"/><stop offset="1" stop-color="#b58e45"/></linearGradient></defs>'
-    + '<path fill-rule="evenodd" fill="url(#xmGold)" stroke="#5a4418" stroke-width=".6" stroke-linejoin="miter" d="M36 4H25L19 6.2C11.5 8 5 12.2 5 18s6.5 10 14 11.8L25 32h11v-4.6H25.6l-5.4-1.6C14 24.4 10 21.6 10 18s4-6.4 10.2-7.8L25.6 8.6H36z"/>'
-    + '<path fill-rule="evenodd" fill="url(#xmGold)" stroke="#5a4418" stroke-width=".6" stroke-linejoin="miter" d="M64 4h11l6 2.2C88.5 8 95 12.2 95 18s-6.5 10-14 11.8L75 32H64v-4.6h10.4l5.4-1.6C86 24.4 90 21.6 90 18s-4-6.4-10.2-7.8L74.4 8.6H64z"/>'
-    + '<rect x="35" y="15.3" width="30" height="5.4" rx=".8" fill="url(#xmGoldH)" stroke="#5a4418" stroke-width=".6"/>'
-    + '<rect x="44.5" y="11.8" width="11" height="12.4" rx="3" fill="url(#xmGold)" stroke="#5a4418" stroke-width=".7"/>'
-    + '<rect x="47" y="14.3" width="6" height="7.4" rx="1.8" fill="#2a1114" stroke="#5a4418" stroke-width=".5"/>'
-    + '<path d="M9.5 14.5c2-3.2 6-5.2 10.5-6.2M90.5 14.5c-2-3.2-6-5.2-10.5-6.2" fill="none" stroke="#fff8e4" stroke-width="1.1" stroke-linecap="round" opacity=".85"/>'
+  const BIT = '<svg viewBox="0 0 120 52" aria-hidden="true">'
+    + '<defs><linearGradient id="xmGold" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f7e6b0"/><stop offset=".5" stop-color="#d8ae5f"/><stop offset="1" stop-color="#9a7633"/></linearGradient>'
+    + '<linearGradient id="xmGoldH" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#b08a42"/><stop offset=".5" stop-color="#f3dc9a"/><stop offset="1" stop-color="#b08a42"/></linearGradient></defs>'
+    + '<rect x="43" y="22.75" width="34" height="6.5" rx=".9" fill="url(#xmGoldH)" stroke="#56411a" stroke-width=".7"/>'
+    + '<path fill-rule="evenodd" fill="url(#xmGold)" stroke="#56411a" stroke-width=".7" stroke-linejoin="miter" d="M46 6v40H40A20 20 0 0 1 40 6H46zM46 12.5H40A13.5 13.5 0 0 0 40 39.5H46z"/>'
+    + '<path fill-rule="evenodd" fill="url(#xmGold)" stroke="#56411a" stroke-width=".7" stroke-linejoin="miter" d="M74 6v40h6A20 20 0 0 0 80 6H74zM74 12.5h6a13.5 13.5 0 0 1 0 27H74z"/>'
+    + '<rect x="53" y="17" width="14" height="18" rx="4" fill="url(#xmGold)" stroke="#56411a" stroke-width=".8"/>'
+    + '<rect x="56.3" y="20.3" width="7.4" height="11.4" rx="2.4" fill="#2a1114" stroke="#56411a" stroke-width=".6"/>'
+    + '<path d="M29.5 18c1.8-4.2 5.2-7.4 9.5-8.6M90.5 18c-1.8-4.2-5.2-7.4-9.5-8.6" fill="none" stroke="#fff9e6" stroke-width="1.3" stroke-linecap="round" opacity=".85"/>'
+    + '<path d="M46.8 9v34M73.2 9v34" stroke="#fff9e6" stroke-width=".8" opacity=".45"/>'
     + '</svg>';
   // --- Line-art ornaments (1px gold engraving style)
   const S = 'fill="none" stroke="' + G + '" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"';
