@@ -277,6 +277,75 @@ body.ro .robadge{display:inline-block}
   .sovrow .v{font-size:13px;width:40px}
   .mixrow .v{width:92px;font-size:10px}
 }
+/* ===== Gucci x Christmas edition (auto: until 2027-01-06; html.xmas) =====
+   Rosso Ancora red velvet, forest-green lacquer, champagne gold, Web stripe,
+   Horsebit ornament, candy-cane scrollbars. Remove html.xmas = classic look. */
+html.xmas{
+  --bg:#120607; --panel:#1d0b0d; --panel2:#2a1114; --line:#4a1f22;
+  --gold:#d9b56a; --gold-dim:#a8874a; --ink:#f3eadb; --ink-dim:#b9a58d;
+  --rosso:#7a0e14; --rosso-hi:#a3121c; --pine:#0f3b2a; --pine-hi:#175e3d;
+}
+html.xmas body{
+  background-color:var(--bg);
+  background-image:
+    radial-gradient(1200px 520px at 50% -140px,rgba(163,18,28,.42),transparent 70%),
+    radial-gradient(900px 600px at 110% 40%,rgba(15,59,42,.30),transparent 70%),
+    radial-gradient(900px 600px at -10% 75%,rgba(15,59,42,.24),transparent 70%),
+    repeating-linear-gradient(45deg,rgba(217,181,106,.035) 0 1px,transparent 1px 18px),
+    repeating-linear-gradient(-45deg,rgba(217,181,106,.035) 0 1px,transparent 1px 18px);
+  background-attachment:fixed,fixed,fixed,scroll,scroll;
+}
+html.xmas .gstripe{height:9px;background:linear-gradient(180deg,var(--gold) 0 1px,#175e3d 1px 34%,#a3121c 34% 66%,#175e3d 66% calc(100% - 1px),var(--gold) calc(100% - 1px))}
+html.xmas header{background:linear-gradient(180deg,rgba(122,14,20,.55),rgba(122,14,20,.08));border-bottom:1px solid var(--gold-dim);position:relative}
+html.xmas header h1{color:var(--gold);text-shadow:0 0 18px rgba(217,181,106,.25)}
+html.xmas .xm-badge{display:inline-flex;align-items:center;gap:7px;margin-left:14px;padding:3px 11px 3px 8px;border:1px solid var(--gold-dim);border-radius:999px;
+  font-size:10.5px;letter-spacing:.32em;color:var(--gold);background:linear-gradient(180deg,rgba(15,59,42,.75),rgba(15,59,42,.35));vertical-align:middle;white-space:nowrap}
+html.xmas .xm-badge svg{width:26px;height:12px;flex:none}
+html.xmas nav{background:linear-gradient(180deg,rgba(15,59,42,.55),rgba(15,59,42,.25));border-bottom:1px solid var(--gold-dim)}
+html.xmas nav button.on{color:var(--gold);border-bottom:2px solid var(--rosso-hi);box-shadow:inset 0 -4px 0 -2px var(--gold)}
+html.xmas .xm-garland{height:22px;margin-top:-1px;pointer-events:none;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='22'%3E%3Cpath d='M0 3 Q30 15 60 3 T120 3' fill='none' stroke='%23d9b56a' stroke-width='1' opacity='.75'/%3E%3Cpath d='M14 6v3M46 6v3M90 6v3' stroke='%23d9b56a' stroke-width='.8'/%3E%3Ccircle cx='14' cy='12.5' r='3.6' fill='%23a3121c'/%3E%3Ccircle cx='14' cy='12.5' r='3.6' fill='none' stroke='%23d9b56a' stroke-width='.6'/%3E%3Ccircle cx='46' cy='13' r='3.2' fill='%23d9b56a'/%3E%3Ccircle cx='90' cy='12.5' r='3.6' fill='%23175e3d'/%3E%3Ccircle cx='90' cy='12.5' r='3.6' fill='none' stroke='%23d9b56a' stroke-width='.6'/%3E%3Ccircle cx='12.8' cy='11.3' r='.9' fill='%23fff' opacity='.55'/%3E%3Ccircle cx='88.8' cy='11.3' r='.9' fill='%23fff' opacity='.5'/%3E%3C/svg%3E") repeat-x 0 0/120px 22px}
+html.xmas .card{background:linear-gradient(165deg,#2a1013,#170809 60%,#12100b);border:1px solid #5a2a24;box-shadow:inset 0 1px 0 rgba(217,181,106,.18)}
+html.xmas .card:hover{border-color:var(--gold-dim)}
+html.xmas .card h3{color:var(--gold-dim)}
+html.xmas .panel,html.xmas .repview,html.xmas .replist{background:linear-gradient(180deg,rgba(42,17,20,.92),rgba(24,9,11,.92));border-color:#4f2226;box-shadow:inset 0 1px 0 rgba(217,181,106,.12)}
+html.xmas h2.sec,html.xmas .panel h2{color:var(--gold)}
+html.xmas h2.sec::before,html.xmas .panel h2::before{content:"";display:inline-block;width:7px;height:7px;margin:0 9px 1px 0;transform:rotate(45deg);
+  background:linear-gradient(135deg,var(--rosso-hi) 50%,var(--pine-hi) 50%);border:1px solid var(--gold);vertical-align:middle}
+html.xmas .bar i{background:linear-gradient(90deg,var(--gold-dim),var(--gold))}
+html.xmas .langtog,html.xmas button.ghost{border-color:var(--gold-dim)}
+html.xmas .langtog button.on{background:var(--rosso);color:var(--gold)}
+html.xmas footer{border-top:1px solid var(--gold-dim)!important;background:linear-gradient(0deg,rgba(15,59,42,.35),transparent)}
+html.xmas .xm-foot{display:block;margin-bottom:8px;font-size:11px;letter-spacing:.42em;color:var(--gold)}
+/* snow sparkle: few gold flecks, compositor-only, off for reduced motion */
+html.xmas .xm-snow{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+html.xmas .xm-snow i{position:absolute;top:-12px;width:3px;height:3px;border-radius:50%;background:#f3eadb;opacity:.0;animation:xmfall linear infinite}
+@keyframes xmfall{0%{transform:translate3d(0,-10px,0);opacity:0}12%{opacity:.55}100%{transform:translate3d(18px,105vh,0);opacity:0}}
+@media (prefers-reduced-motion:reduce){html.xmas .xm-snow{display:none}}
+html.xmas header,html.xmas nav,html.xmas main,html.xmas footer,html.xmas .xm-garland{position:relative;z-index:1}
+/* candy-cane scrollbars: page + lists (native, desktop browsers) */
+html.xmas{scrollbar-color:#c8202c #1d0b0d}
+html.xmas ::-webkit-scrollbar{width:12px;height:12px}
+html.xmas ::-webkit-scrollbar-track{background:#1d0b0d;border-left:1px solid #3a1719}
+html.xmas ::-webkit-scrollbar-thumb{border-radius:12px;border:2px solid #1d0b0d;
+  background:repeating-linear-gradient(-45deg,#fbf6ee 0 6px,#c8202c 6px 12px)}
+html.xmas ::-webkit-scrollbar-thumb:hover{background:repeating-linear-gradient(-45deg,#fff 0 6px,#e0262f 6px 12px)}
+/* brief viewer: custom candy cane (hooked) replaces the native bar, desktop + mobile */
+html.xmas .xm-canewrap{position:relative}
+html.xmas .xm-canewrap>.repview{scrollbar-width:none;padding-right:40px}
+html.xmas .xm-canewrap>.repview::-webkit-scrollbar{display:none}
+html.xmas .xm-track{position:absolute;top:10px;bottom:10px;right:6px;width:22px;border-radius:11px;background:linear-gradient(90deg,transparent 9px,rgba(217,181,106,.18) 9px 13px,transparent 13px);touch-action:none;cursor:pointer}
+html.xmas .xm-cane{position:absolute;right:0;width:22px;touch-action:none;cursor:grab;filter:drop-shadow(0 2px 3px rgba(0,0,0,.55))}
+html.xmas .xm-cane:active{cursor:grabbing}
+html.xmas .xm-cane .hook{display:block;width:22px;height:20px}
+html.xmas .xm-cane .stick{display:block;margin-left:13px;width:8px;border-radius:0 0 4px 4px;
+  background:repeating-linear-gradient(-55deg,#fbf6ee 0 5px,#c8202c 5px 10px);box-shadow:inset -2px 0 0 rgba(0,0,0,.18),inset 1px 0 0 rgba(255,255,255,.5)}
+html.xmas .xm-track.none{display:none}
+@media (max-width:640px){
+  html.xmas .xm-badge{margin:6px 0 0;letter-spacing:.22em}
+  html.xmas .xm-canewrap>.repview{padding-right:34px}
+  html.xmas .xm-track{right:3px}
+}
 </style>
 </head>
 <body>
@@ -1440,6 +1509,86 @@ async function pollRun(){
 }
 function refreshAll(){ REP_CACHE.clear(); loadDash(); if(curTab==='rep')loadReports(); if(curTab==='sp')loadSpecial(); if(curTab==='news')loadNews(); if(curTab==='lux')loadLux(); if(curTab==='prod')loadProd(); if(curTab==='cal')loadCal(); if(curTab==='amb')loadAmb(); if(curTab==='cd')loadCd(); if(curTab==='guide')renderGuide(); pollRun(); }
 applyChrome(); renderGuide(); loadDash(); pollRun();
+/* ---------- Gucci x Christmas edition (auto until 2027-01-06 KST; ?theme=classic|xmas to preview) ---------- */
+(function(){
+  const q = new URLSearchParams(location.search).get('theme');
+  const on = q ? q === 'xmas' : Date.now() <= Date.parse('2027-01-06T23:59:59+09:00');
+  if(!on) return;
+  const root = document.documentElement;
+  root.classList.add('xmas');
+  // Horsebit-style ornament: two gold rings joined by a bar
+  const bit = '<svg viewBox="0 0 26 12" aria-hidden="true"><circle cx="6" cy="6" r="4.2" fill="none" stroke="#d9b56a" stroke-width="1.6"/>'
+    + '<circle cx="20" cy="6" r="4.2" fill="none" stroke="#d9b56a" stroke-width="1.6"/><rect x="9.5" y="5" width="7" height="2" rx="1" fill="#d9b56a"/></svg>';
+  const h1 = document.querySelector('header h1');
+  if(h1){ const b = document.createElement('span'); b.className = 'xm-badge'; b.innerHTML = bit + 'HOLIDAY EDITION'; h1.after(b); }
+  const nav = document.querySelector('nav');
+  if(nav){ const g = document.createElement('div'); g.className = 'xm-garland'; nav.after(g); }
+  const foot = document.querySelector('footer');
+  if(foot){ const f = document.createElement('span'); f.className = 'xm-foot'; f.textContent = 'HAPPY HOLIDAYS · BUON NATALE'; foot.prepend(f); }
+  // sparse snow: 16 flecks, transform-only animation
+  const snow = document.createElement('div'); snow.className = 'xm-snow';
+  for(let i = 0; i < 16; i++){
+    const s = document.createElement('i');
+    s.style.left = (Math.random() * 100).toFixed(1) + '%';
+    s.style.animationDuration = (11 + Math.random() * 12).toFixed(1) + 's';
+    s.style.animationDelay = (-Math.random() * 20).toFixed(1) + 's';
+    const z = (1.5 + Math.random() * 2.5).toFixed(1); s.style.width = s.style.height = z + 'px';
+    snow.appendChild(s);
+  }
+  document.body.prepend(snow);
+
+  // Candy-cane scrollbar for the brief viewer (.repview): hooked SVG crook +
+  // striped stick sized like a scrollbar thumb; drag / track-click / touch.
+  const HOOK = '<svg class="hook" viewBox="0 -1 22 21" aria-hidden="true">'
+    + '<path d="M17 21V9A6 6 0 0 0 5 9V12" fill="none" stroke="#fbf6ee" stroke-width="7" stroke-linecap="round"/>'
+    + '<path d="M17 21V9A6 6 0 0 0 5 9V12" fill="none" stroke="#c8202c" stroke-width="7" stroke-dasharray="4.2 4.2"/>'
+    + '<path d="M19 21V9.4" stroke="rgba(0,0,0,.18)" stroke-width="2"/></svg>';
+  function cane(el){
+    if(el.dataset.cane) return; el.dataset.cane = '1';
+    const wrap = document.createElement('div'); wrap.className = 'xm-canewrap';
+    el.parentNode.insertBefore(wrap, el); wrap.appendChild(el);
+    const track = document.createElement('div'); track.className = 'xm-track';
+    const c = document.createElement('div'); c.className = 'xm-cane';
+    c.innerHTML = HOOK + '<span class="stick"></span>';
+    track.appendChild(c); wrap.appendChild(track);
+    const stick = c.querySelector('.stick');
+    let L = 0, H = 0;
+    function sync(){
+      const max = el.scrollHeight - el.clientHeight;
+      track.classList.toggle('none', max <= 2);
+      track.style.top = (el.offsetTop + 10) + 'px';
+      track.style.height = (el.clientHeight - 20) + 'px';
+      track.style.bottom = 'auto';
+      H = track.clientHeight;
+      L = Math.max(64, Math.min(H, H * el.clientHeight / Math.max(el.scrollHeight, 1)));
+      stick.style.height = Math.max(L - 20, 24) + 'px';
+      c.style.top = (max > 0 ? (H - L) * el.scrollTop / max : 0) + 'px';
+    }
+    el.addEventListener('scroll', sync, {passive:true});
+    window.addEventListener('resize', sync);
+    if(window.ResizeObserver) new ResizeObserver(sync).observe(el);
+    new MutationObserver(() => requestAnimationFrame(sync)).observe(el, {childList:true, subtree:true});
+    let dragY = null, dragTop = 0;
+    c.addEventListener('pointerdown', e => { dragY = e.clientY; dragTop = parseFloat(c.style.top) || 0; c.setPointerCapture(e.pointerId); e.preventDefault(); e.stopPropagation(); });
+    c.addEventListener('pointermove', e => {
+      if(dragY === null) return;
+      const max = el.scrollHeight - el.clientHeight, room = H - L;
+      const top = Math.min(room, Math.max(0, dragTop + e.clientY - dragY));
+      el.scrollTop = room > 0 ? top / room * max : 0;
+    });
+    const end = () => { dragY = null; };
+    c.addEventListener('pointerup', end); c.addEventListener('pointercancel', end);
+    track.addEventListener('pointerdown', e => {
+      if(e.target.closest('.xm-cane')) return;
+      const r = c.getBoundingClientRect();
+      el.scrollBy({top: (e.clientY < r.top ? -1 : 1) * el.clientHeight * 0.9, behavior:'smooth'});
+    });
+    sync();
+  }
+  function scan(){ document.querySelectorAll('.repview').forEach(cane); }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', scan); else scan();
+  new MutationObserver(scan).observe(document.body, {childList:true, subtree:true});
+})();
 </script>
 
 </body>
