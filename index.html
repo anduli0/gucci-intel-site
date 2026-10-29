@@ -254,7 +254,9 @@ body.ro .robadge{display:inline-block}
   main{padding:14px 12px}
   .cards,.gcards,.prevs,.runbtns,.pgrid{grid-template-columns:1fr}
   .card .big{font-size:36px}
-  .replist{max-height:300px}
+  .replist{max-height:300px;scroll-margin-top:8px}
+  .repview{max-height:80vh;scroll-margin-top:8px}
+  .xm-canewrap{scroll-margin-top:8px}
   .repview{padding:16px 14px;font-size:13px;overflow-x:auto}
   table.gt td,table.gt th{padding:5px 7px;font-size:11px}
   .calitem{flex-direction:column;gap:6px}
@@ -1409,8 +1411,18 @@ async function loadReports(){
 }
 async function openReport(p){
   curReport=p;
+  const mobile = window.matchMedia('(max-width:640px)').matches;
+  // Mobile: collapse the accordion to date rows so the report gets the screen;
+  // the compact list stays above it, so scrolling back up never overlaps.
+  if(mobile && repOpen){ repOpen.clear(); renderRepList(); }
   const d=await getReport(p);
-  $('repview').innerHTML = d.error ? `<div class="empty">${esc(d.error)}</div>` : renderMd(d.content);
+  const rv=$('repview');
+  rv.innerHTML = d.error ? `<div class="empty">${esc(d.error)}</div>` : renderMd(d.content);
+  rv.scrollTop=0;
+  if(mobile){
+    const box = rv.closest('.xm-canewrap') || rv;
+    requestAnimationFrame(()=>box.scrollIntoView({behavior:'smooth', block:'start'}));
+  }
   loadReports();
 }
 function renderMd(text){
