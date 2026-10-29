@@ -304,7 +304,7 @@ html.xmas header{background:linear-gradient(180deg,rgba(122,14,20,.55),rgba(122,
 html.xmas header h1{color:var(--gold);text-shadow:0 0 18px rgba(220,184,113,.25)}
 html.xmas .xm-badge{display:inline-flex;align-items:center;gap:8px;margin-left:14px;padding:4px 12px 4px 9px;border:1px solid var(--gold-dim);border-radius:999px;
   font-size:10.5px;letter-spacing:.3em;color:var(--gold);background:linear-gradient(180deg,rgba(14,58,41,.8),rgba(14,58,41,.4));vertical-align:middle;white-space:nowrap}
-html.xmas .xm-badge svg{width:44px;height:18px;flex:none}
+html.xmas .xm-badge svg{width:54px;height:19px;flex:none}
 /* header ornaments: engraved Santa+sleigh (right) and stocking (left) in dead space */
 html.xmas .xm-hdr-art{position:absolute;bottom:-1px;pointer-events:none;opacity:.85;width:auto}
 html.xmas .xm-hdr-art.l{left:26px;height:34px}
@@ -316,17 +316,17 @@ html.xmas .xm-garland{height:26px;margin-top:-1px;pointer-events:none;background
 html.xmas .card{background:linear-gradient(165deg,#2a1013,#170809 60%,#12100b);border:1px solid #5a2a24;box-shadow:inset 0 1px 0 rgba(220,184,113,.18);position:relative}
 html.xmas .card:hover{border-color:var(--gold-dim)}
 html.xmas .card h3{color:var(--gold-dim)}
-html.xmas .cards .card:first-child::after{content:"";position:absolute;right:12px;bottom:10px;width:46px;height:40px;background:var(--xm-tree) no-repeat center/contain;opacity:.55;pointer-events:none}
+html.xmas .cards .card:first-child::after{content:"";position:absolute;right:14px;bottom:12px;width:78px;height:96px;background:var(--xm-tree) no-repeat center/contain;opacity:.9;pointer-events:none}
 html.xmas .panel,html.xmas .repview,html.xmas .replist{background:linear-gradient(180deg,rgba(43,17,20,.92),rgba(24,9,11,.92));border-color:#4f2226;box-shadow:inset 0 1px 0 rgba(220,184,113,.12)}
 html.xmas h2.sec,html.xmas .panel h2{color:var(--gold)}
-html.xmas h2.sec::before,html.xmas .panel h2::before{content:"";display:inline-block;width:18px;height:8px;margin:0 9px 2px 0;background:var(--xm-bit) no-repeat center/contain;vertical-align:middle}
+html.xmas h2.sec::before,html.xmas .panel h2::before{content:"";display:inline-block;width:24px;height:9px;margin:0 9px 2px 0;background:var(--xm-bit) no-repeat center/contain;vertical-align:middle}
 html.xmas .bar i{background:linear-gradient(90deg,var(--gold-dim),var(--gold))}
 html.xmas .langtog,html.xmas button.ghost{border-color:var(--gold-dim)}
 html.xmas .langtog button.on{background:var(--rosso);color:var(--gold)}
 html.xmas .empty{background:var(--xm-gift) no-repeat center 18px/44px 44px;padding-top:74px}
 html.xmas footer{border-top:1px solid var(--gold-dim)!important;background:linear-gradient(0deg,rgba(14,58,41,.35),transparent);position:relative}
 html.xmas .xm-foot{display:block;margin-bottom:10px;font-size:11px;letter-spacing:.42em;color:var(--gold)}
-html.xmas .xm-foot-art{display:block;margin:0 auto 10px;height:30px;opacity:.9}
+html.xmas .xm-foot-art{display:flex;justify-content:center;align-items:flex-end;margin:0 auto 10px;height:56px;opacity:.9}
 /* snow: six-fold crystals, transform-only drift */
 html.xmas .xm-snow{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
 html.xmas .xm-snow svg{position:absolute;top:-30px;opacity:0;animation:xmfall linear infinite;fill:none;stroke:#f4ecdd;stroke-width:1.1;stroke-linecap:round}
@@ -1552,13 +1552,35 @@ applyChrome(); renderGuide(); loadDash(); pollRun();
   root.classList.add('xmas');
   const G = '#dcb871';
   // --- Horsebit: two stirrup rings (flattened ovals, open at the bar) joined by a bar with a centre link.
-  const BIT = '<svg viewBox="0 0 68 28" aria-hidden="true" fill="none" stroke="' + G + '" stroke-width="2.6" stroke-linecap="round">'
-    + '<path d="M22 14a9.5 9.5 0 1 1-9.5-9.5 9.5 9.5 0 0 1 9.5 9.5Z"/><path d="M46 14a9.5 9.5 0 1 0 9.5-9.5A9.5 9.5 0 0 0 46 14Z"/>'
-    + '<path d="M22 14h24"/><path d="M30 10.5v7M38 10.5v7" stroke-width="2.2"/>'
-    + '<path d="M11 6.5v15M57 6.5v15" stroke-width="1.6" opacity=".6"/></svg>';
+  const BIT = '<svg viewBox="0 0 96 34" aria-hidden="true">'
+    + '<defs><linearGradient id="xmGold" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f3dfa6"/><stop offset=".5" stop-color="#d6ad5e"/><stop offset="1" stop-color="#a7843f"/></linearGradient></defs>'
+    // left D-stirrup: flat inner edge at x=34, rounded outer; drawn as thick stroked path (ring width 5)
+    + '<path d="M34 7.5H22C13.5 7.5 7 11.8 7 17s6.5 9.5 15 9.5h12" fill="none" stroke="url(#xmGold)" stroke-width="5" stroke-linejoin="round"/>'
+    + '<path d="M34 7.5H22C13.5 7.5 7 11.8 7 17s6.5 9.5 15 9.5h12" fill="none" stroke="#5a4418" stroke-width="5.8" stroke-linejoin="round" opacity=".35" transform="translate(0 .8)" style="mix-blend-mode:multiply"/>'
+    + '<path d="M34 7.5H22C13.5 7.5 7 11.8 7 17s6.5 9.5 15 9.5h12" fill="none" stroke="url(#xmGold)" stroke-width="5" stroke-linejoin="round"/>'
+    // right D-stirrup (mirror)
+    + '<path d="M62 7.5h12c8.5 0 15 4.3 15 9.5s-6.5 9.5-15 9.5H62" fill="none" stroke="url(#xmGold)" stroke-width="5" stroke-linejoin="round"/>'
+    // flat inner uprights of the D (the "stirrup" edge)
+    + '<rect x="31.5" y="5" width="5" height="24" rx="1.2" fill="url(#xmGold)"/><rect x="59.5" y="5" width="5" height="24" rx="1.2" fill="url(#xmGold)"/>'
+    // connecting bar through both uprights
+    + '<rect x="34" y="14.5" width="28" height="5" rx="1" fill="url(#xmGold)"/>'
+    // raised centre link (the small oblong at the middle of the bar)
+    + '<rect x="43" y="11.5" width="10" height="11" rx="2.2" fill="url(#xmGold)" stroke="#5a4418" stroke-width=".7"/>'
+    + '<rect x="45" y="13.5" width="6" height="7" rx="1.2" fill="none" stroke="#5a4418" stroke-width=".7" opacity=".7"/>'
+    // specular highlights
+    + '<path d="M11 13.5c2-3 6-4.5 10-4.5M85 13.5c-2-3-6-4.5-10-4.5" fill="none" stroke="#fff6dc" stroke-width="1.1" stroke-linecap="round" opacity=".8"/>'
+    + '</svg>';
   // --- Line-art ornaments (1px gold engraving style)
   const S = 'fill="none" stroke="' + G + '" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"';
-  const TREE = '<svg viewBox="0 0 46 40" ' + S + '><path d="M23 3 14 15h5l-7 9h6l-8 9h30l-8-9h6l-7-9h5Z"/><path d="M20 33v5h6v-5"/><path d="M23 3l1.4-1.6M23 3l-1.4-1.6M23 3v-2" stroke-width="1"/><circle cx="19" cy="20" r="1.3"/><circle cx="27" cy="26" r="1.3"/><circle cx="23" cy="14" r="1.1"/></svg>';
+  const TREE = '<svg viewBox="0 0 60 76" ' + S + '>'
+    + '<path d="M30 4l-9 13h5l-9 12h6l-10 13h34L37 29h6l-9-12h5z"/>'                      // three tiers
+    + '<path d="M26 42v8h8v-8"/><rect x="24" y="50" width="12" height="4" rx="1" fill="#7a0e14" stroke="#7a0e14"/>'  // trunk + pot
+    + '<path d="M30 4l1.6-2.2M30 4l-1.6-2.2M30 4V1.4M28.4 3.2l3.2 0" stroke-width="1"/>'  // star
+    + '<path d="M22 19c4 2 12 2 16 0M18 30c6 3 18 3 24 0M14 41c8 4 24 4 32 0" stroke-dasharray="2.2 2.6" opacity=".8"/>'  // garland swags
+    + '<circle cx="27" cy="23" r="1.6" fill="#d41f2a" stroke="#d41f2a"/><circle cx="35" cy="34" r="1.6" fill="' + G + '"/><circle cx="23" cy="36" r="1.5" fill="#fbf6ee" stroke="#fbf6ee"/><circle cx="33" cy="14" r="1.3" fill="' + G + '"/>'
+    + '<rect x="12" y="54" width="9" height="7" rx="1" fill="#d41f2a" stroke="#7a0e14"/><path d="M16.5 54v7M12 57.5h9" stroke="' + G + '" stroke-width="1"/>'   // gifts under the tree
+    + '<rect x="38" y="55" width="11" height="6" rx="1" fill="#175e3d" stroke="#0e3a29"/><path d="M43.5 55v6M38 58h11" stroke="' + G + '" stroke-width="1"/>'
+    + '</svg>';
   const GIFT = '<svg viewBox="0 0 44 44" ' + S + '><rect x="6" y="16" width="32" height="24" rx="1.5"/><path d="M4 11h36v6H4z"/><path d="M22 11v29M6 28h32" opacity=".6"/><path d="M22 11c-6 0-9-3-9-6 0-2.5 3-3 5 0 1.6 2.4 4 6 4 6s2.4-3.6 4-6c2-3 5-2.5 5 0 0 3-3 6-9 6Z"/></svg>';
   const SOCK = '<svg viewBox="0 0 34 44" ' + S + '><path d="M9 3h16v9H9z"/><path d="M11 12v15c0 3-1 4-4 6s-4 6 0 8 10 2 13-2 4-7 4-10V12"/><path d="M11 18h13M11 22h13" opacity=".55" stroke-dasharray="2 2"/><circle cx="12" cy="36" r="1.2"/></svg>';
   const SANTA_SLEIGH_H = '<svg viewBox="0 0 150 40" ' + S + '>'
@@ -1591,7 +1613,11 @@ applyChrome(); renderGuide(); loadDash(); pollRun();
     + '<ellipse cx="18" cy="73" rx="8.5" ry="2.2" fill="#fbf6ee" opacity=".9"/>'
     + '<circle cx="18" cy="68" r="4.6" fill="#d41f2a" stroke="#7a0e14" stroke-width=".6"/><circle cx="18" cy="63.5" r="1.9" fill="#fbf6ee"/>'
     + '<rect x="10.5" y="80" width="15" height="2" rx="1" fill="#2a0b0d"/><rect x="16.8" y="79.6" width="2.4" height="2.8" fill="' + G + '"/>'
-    + '<ellipse cx="18" cy="92" rx="6.5" ry="6" fill="#175e3d" stroke="#0e3a29" stroke-width=".6"/><path d="M14 89l8 6M22 89l-8 6" stroke="' + G + '" stroke-width="1" opacity=".7"/>'  // sack behind, tied
+    // stacked gift boxes behind Santa (seen from above): three boxes, ribbon crosses, slight offsets
+    + '<rect x="9.5" y="85" width="10" height="9" rx="1" fill="#175e3d" stroke="#0e3a29" stroke-width=".6"/><path d="M14.5 85v9M9.5 89.5h10" stroke="' + G + '" stroke-width="1.1"/>'
+    + '<rect x="19" y="87" width="8" height="8" rx="1" fill="#d41f2a" stroke="#7a0e14" stroke-width=".6"/><path d="M23 87v8M19 91h8" stroke="#fbf6ee" stroke-width="1"/>'
+    + '<rect x="12.5" y="95" width="11" height="8" rx="1" fill="#fbf6ee" stroke="#a98a4e" stroke-width=".6"/><path d="M18 95v8M12.5 99h11" stroke="#d41f2a" stroke-width="1.1"/>'
+    + '<circle cx="14.5" cy="89.5" r="1.4" fill="' + G + '"/><circle cx="23" cy="91" r="1.2" fill="#fbf6ee"/><circle cx="18" cy="99" r="1.4" fill="#d41f2a"/>'  // bows
     + '</g></svg>';
   const FLAKES = [
     // six-fold crystal, 3 variants
@@ -1624,7 +1650,7 @@ applyChrome(); renderGuide(); loadDash(); pollRun();
   if(nav){ const g = document.createElement('div'); g.className = 'xm-garland'; nav.after(g); }
   const foot = document.querySelector('footer');
   if(foot){
-    const a = document.createElement('div'); a.className = 'xm-foot-art'; a.innerHTML = SANTA_SLEIGH_H.replace('viewBox', 'style="height:30px" viewBox'); foot.prepend(a);
+    const a = document.createElement('div'); a.className = 'xm-foot-art'; a.innerHTML = TREE.replace('<svg ', '<svg style="height:54px;width:auto;vertical-align:bottom;margin-right:18px" ') + SANTA_SLEIGH_H.replace('viewBox', 'style="height:30px;vertical-align:bottom" viewBox'); foot.prepend(a);
     const f = document.createElement('span'); f.className = 'xm-foot'; f.textContent = 'BUON NATALE · GUCCI INTELLIGENCE CHRISTMAS EDITION'; foot.prepend(f);
   }
   // snow crystals
