@@ -353,6 +353,9 @@ html.xmas .empty{background:var(--xm-gift) no-repeat center 18px/44px 44px;paddi
 html.xmas footer{border-top:1px solid var(--gold-dim)!important;background:linear-gradient(0deg,rgba(14,58,41,.35),transparent);position:relative}
 html.xmas .xm-foot{display:block;margin-bottom:10px;font-size:11px;letter-spacing:.42em;color:var(--gold)}
 html.xmas .xm-foot-art{display:flex;justify-content:center;align-items:flex-end;margin:0 auto 10px;height:56px;opacity:.9}
+html.xmas .xm-sig{font-family:'Great Vibes','Brush Script MT','Segoe Script',cursive;font-size:34px;line-height:1;color:var(--gold-ink);margin-left:22px;letter-spacing:.02em;display:inline-flex;align-items:center;gap:6px;text-shadow:0 0 14px rgba(220,184,113,.35)}
+html.xmas .xm-sig svg{width:22px;height:20px;margin-top:-6px;filter:drop-shadow(0 1px 2px rgba(0,0,0,.5))}
+@media (max-width:640px){ html.xmas .xm-sig{font-size:28px;margin-left:14px} }
 /* snow: six-fold crystals, transform-only drift */
 html.xmas .xm-snow{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
 html.xmas .xm-snow svg{position:absolute;top:-30px;opacity:0;animation:xmfall linear infinite;fill:none;stroke:#f4ecdd;stroke-width:1.1;stroke-linecap:round}
@@ -1670,9 +1673,15 @@ applyChrome(); renderGuide(); loadDash(); pollRun();
   }
   const nav = document.querySelector('nav');
   if(nav){ const g = document.createElement('div'); g.className = 'xm-garland'; nav.after(g); }
+  // script font for the signature (loaded only in the edition)
+  const lf = document.createElement('link'); lf.rel = 'stylesheet';
+  lf.href = 'https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap'; document.head.appendChild(lf);
   const foot = document.querySelector('footer');
   if(foot){
     const a = document.createElement('div'); a.className = 'xm-foot-art'; a.innerHTML = TREE.replace('<svg ', '<svg style="height:54px;width:auto;vertical-align:bottom;margin-right:18px" ') + SANTA_SLEIGH_H.replace('viewBox', 'style="height:30px;vertical-align:bottom" viewBox'); foot.prepend(a);
+    const sig = document.createElement('span'); sig.className = 'xm-sig';
+    sig.innerHTML = 'MRK <svg viewBox="0 0 24 22" aria-hidden="true"><path d="M12 21s-8.5-5.6-10.6-10.4C-.4 6.3 2.4 1.5 6.8 1.5c2.3 0 4 1.3 5.2 3 1.2-1.7 2.9-3 5.2-3 4.4 0 7.2 4.8 5.4 9.1C20.5 15.4 12 21 12 21z" fill="#c8202c" stroke="#7a0e14" stroke-width=".8"/><path d="M5.2 6.2c.6-1.4 1.8-2.3 3.1-2.4" fill="none" stroke="#fff" stroke-width="1.1" stroke-linecap="round" opacity=".7"/></svg>';
+    a.appendChild(sig);
     const f = document.createElement('span'); f.className = 'xm-foot'; f.textContent = 'BUON NATALE · GUCCI INTELLIGENCE CHRISTMAS EDITION'; foot.prepend(f);
   }
   // snow crystals
