@@ -213,6 +213,12 @@ table.gt th{background:var(--panel2);color:var(--gold);font-weight:500}
 .replist .tm{font-size:10.5px;color:var(--ink-dim);margin-top:2px}
 .repview{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:24px 28px;overflow-y:auto;overflow-x:hidden;max-height:72vh;line-height:1.95;font-size:13.5px;font-weight:380;overflow-wrap:anywhere}
 .repview .tblwrap{overflow-x:auto;max-width:100%;touch-action:auto}
+.repview figure.mdfig{margin:18px 0 22px;padding:0;text-align:center}
+.repview figure.mdfig img{max-width:100%;max-height:520px;border-radius:8px;border:1px solid var(--line);display:inline-block}
+.repview figure.mdfig figcaption{font-size:12px;color:var(--ink-dim);margin-top:8px;line-height:1.6}
+.repview figure.mdfig .credit{display:block;font-size:11px;color:var(--gold-dim);letter-spacing:.04em}
+.repview figure.mdfig .credit a{color:var(--gold-dim)}
+html.xmas .repview figure.mdfig img{border-color:var(--gold-dim);box-shadow:0 6px 24px rgba(0,0,0,.45)}
 .repview h1m{display:block;font-size:17px;color:var(--gold);margin:10px 0;font-weight:600;letter-spacing:.02em}
 .repview h2m{display:block;font-size:15px;color:var(--gold);margin:14px 0 6px;font-weight:550}
 .repview table{border-collapse:collapse;margin:10px 0;width:100%}
@@ -1485,6 +1491,14 @@ function renderMd(text){
     if(m=tx.match(/^#{1,2}\s+(.*)/)){ flushPara(); out.push(`<h1m>${linkify(esc(m[1]))}</h1m>`); continue; }
     if(m=tx.match(/^#{3,6}\s+(.*)/)){ flushPara(); out.push(`<h2m>${linkify(esc(m[1]))}</h2m>`); continue; }
     const s=tx.trim();
+    const fig=/^!\[([^\]]*)\]\((\S+?)(?:\s+"([^"]*)")?\)\s*$/.exec(s.trim());
+    if(fig){
+      flushPara();
+      const [,cap,src,meta]=fig; const [srcName,srcHref]=(meta||'').split('|');
+      const credit=srcName?`<span class="credit">${srcHref?`<a href="${esc(srcHref)}" target="_blank" rel="noopener">${esc(srcName)}</a>`:esc(srcName)}</span>`:'';
+      out.push(`<figure class="mdfig"><img src="${esc(src)}" alt="${esc(cap)}" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.closest('figure').style.display='none'"><figcaption>${esc(cap)}${credit}</figcaption></figure>`);
+      continue;
+    }
     if(s.startsWith('□')||s.startsWith('○')||s.startsWith('·')||/^[-*]\s/.test(s)){
       flushPara();
       const cls = s.startsWith('□')?'l0' : s.startsWith('○')?'l1' : 'l2';
