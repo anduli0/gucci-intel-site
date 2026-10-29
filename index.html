@@ -420,6 +420,7 @@ html.xmas .xm-track.none{display:none}
   <button id="tab-rep" onclick="showTab('rep')"></button>
   <button id="tab-news" onclick="showTab('news')"></button>
   <button id="tab-sp" onclick="showTab('sp')"></button>
+  <button id="tab-xmas" onclick="showTab('xmas')"></button>
   <button id="tab-lux" onclick="showTab('lux')"></button>
   <button id="tab-cd" onclick="showTab('cd')"></button>
   <button id="tab-prod" onclick="showTab('prod')"></button>
@@ -453,6 +454,7 @@ html.xmas .xm-track.none{display:none}
 </section>
 
 <section id="view-sp" class="hidden"><div id="spBody"></div></section>
+<section id="view-xmas" class="hidden"><div id="xmasBody"></div></section>
 
 <section id="view-news" class="hidden"><div id="newsBody"></div></section>
 
@@ -525,7 +527,7 @@ let curTab='dash', pollTimer=null, curReport=null, luxData=null, luxSel=null, ui
 
 const STR = {
   ko: {
-    refresh:'새로고침', tabs:{dash:'대시보드',sp:'스페셜·이벤트',news:'뉴스',lux:'럭셔리 워치',prod:'제품',cal:'캘린더',amb:'앰배서더',cd:'디렉터',rep:'데일리 리포트',guide:'지수 가이드',run:'실행'},
+    refresh:'새로고침', tabs:{dash:'대시보드',sp:'스페셜·이벤트',xmas:'크리스마스',news:'뉴스',lux:'럭셔리 워치',prod:'제품',cal:'캘린더',amb:'앰배서더',cd:'디렉터',rep:'데일리 리포트',guide:'지수 가이드',run:'실행'},
     cdEmpty:'크리에이티브 디렉터 심층분석이 아직 없음<br>디렉터 데스크가 브랜드별 CD를 한 명씩 종합 분석(스타일·지향점·전임 성과·인터뷰)해 여기 쌓음. CD 교체·이직·인터뷰가 나오면 자동 갱신',
     cdCat:'CREATIVE DIRECTOR',
     spSecSpecial:'스페셜 심층 리포트', spSecSpecialNote:'패션쇼·핵심 이슈를 한 편의 전문 분석으로 — 최소 3일에 한 번 발행 보장',
@@ -610,7 +612,7 @@ const STR = {
     poolFail:'소스풀을 불러오지 못함', poolComp:'경쟁사 세트', poolWatch:'업계 감시망', loading:'불러오는 중'
   },
   en: {
-    refresh:'Refresh', tabs:{dash:'Dashboard',sp:'Special & Events',news:'News',lux:'Luxury Watch',prod:'Products',cal:'Calendar',amb:'Ambassadors',cd:'Directors',rep:'Daily Reports',guide:'Index Guide',run:'Run'},
+    refresh:'Refresh', tabs:{dash:'Dashboard',sp:'Special & Events',xmas:'Christmas',news:'News',lux:'Luxury Watch',prod:'Products',cal:'Calendar',amb:'Ambassadors',cd:'Directors',rep:'Daily Reports',guide:'Index Guide',run:'Run'},
     cdEmpty:'No creative-director deep dives yet<br>The director desk profiles one CD per brand (style, vision, track record, interviews) and updates on moves/interviews',
     cdCat:'CREATIVE DIRECTOR',
     spSecSpecial:'Special Deep-Dive Reports', spSecSpecialNote:'Flagship expert analysis of shows and defining issues — published at least once every 3 days',
@@ -701,12 +703,13 @@ function setLang(l){
   LANG=l; localStorage.setItem('gi-lang', l);
   applyChrome(); refreshAll(); renderGuide();
   if(curTab==='rep' && curReport) openReport(curReport);
+  if(curTab==='xmas') loadXmas();
 }
 function applyChrome(){
   $('lang-ko').classList.toggle('on', LANG==='ko');
   $('lang-en').classList.toggle('on', LANG==='en');
   $('btnRefresh').textContent=t().refresh;
-  for(const k of ['dash','sp','news','lux','prod','cal','amb','cd','rep','guide','run']) $('tab-'+k).textContent=t().tabs[k];
+  for(const k of ['dash','sp','xmas','news','lux','prod','cal','amb','cd','rep','guide','run']) $('tab-'+k).textContent=t().tabs[k];
   $('gmaiNote').textContent=t().gmaiNote;
   $('footOwner').innerHTML=t().footOwner;
   $('trigTitle').textContent=t().trig; $('sigTitle').textContent=t().sig; $('chartTitle').textContent=t().chart; $('gapTitle').textContent=t().gap;
@@ -724,12 +727,13 @@ function applyChrome(){
 function showTab(tb){
   curTab=tb;
   DOC_LOCK={}; // leaving/re-entering a tab always returns to its list view
-  for(const x of ['dash','sp','news','lux','prod','cal','amb','cd','rep','guide','run']){
+  for(const x of ['dash','sp','xmas','news','lux','prod','cal','amb','cd','rep','guide','run']){
     $('view-'+x).classList.toggle('hidden', x!==tb);
     $('tab-'+x).classList.toggle('on', x===tb);
   }
   if(tb==='rep') loadReports();
   if(tb==='sp') loadSpecial();
+  if(tb==='xmas') loadXmas();
   if(tb==='news') loadNews();
   if(tb==='lux') loadLux();
   if(tb==='prod') loadProd();
@@ -1147,6 +1151,13 @@ async function loadAmb(){
 }
 
 /* ---------- special + events (merged desk) ---------- */
+async function loadXmas(){
+  // Christmas tab = the permanent Gucci x Christmas history archive, opened directly.
+  DOC_LOCK['xmasBody']=true;
+  const d=await getReport('archive/gucci-christmas-history.md');
+  $('xmasBody').innerHTML = `<div class="repview" style="max-height:none">${d.error?`<div class="empty">${esc(d.error)}</div>`:renderMd(d.content)}</div>`;
+  window.scrollTo(0,0);
+}
 async function loadSpecial(){
   const [rd, ed] = await Promise.all([jget('/api/reports'), jget('/api/events')]);
   if(DOC_LOCK['spBody']) return; // a document view opened while we were fetching
