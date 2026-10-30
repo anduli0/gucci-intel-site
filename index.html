@@ -390,7 +390,7 @@ html.xmas .xm-canewrap>.repview::-webkit-scrollbar{display:none}
 html.xmas .xm-track{position:absolute;top:10px;right:6px;width:26px;border-radius:13px;background:linear-gradient(90deg,transparent 11px,rgba(220,184,113,.16) 11px, rgba(220,184,113,.16) 15px,transparent 15px);touch-action:none;cursor:pointer}
 html.xmas .xm-cane{position:absolute;right:0;width:26px;touch-action:none;cursor:grab;filter:drop-shadow(0 2px 3px rgba(0,0,0,.55))}
 html.xmas .xm-cane:active{cursor:grabbing}
-html.xmas .xm-cane svg.hook{display:block;width:26px;height:29px;overflow:visible}
+html.xmas .xm-cane svg.hook{display:block;width:26px;height:auto;overflow:visible}
 html.xmas .xm-cane .stick{display:block;margin-left:15px;width:10px;border-radius:0 0 5px 5px;
   background:repeating-linear-gradient(-55deg,var(--cream) 0, var(--cream) 6px,var(--cane) 6px, var(--cane) 12px);
   box-shadow:inset -2px 0 0 rgba(0,0,0,.2),inset 1.5px 0 0 rgba(255,255,255,.55)}
@@ -1748,21 +1748,24 @@ applyChrome(); renderGuide(); loadDash(); pollRun();
   })();
 
   // ---- Brief viewer: candy cane (hook + diagonal-striped stick); drag / track-click / touch ----
-  // pattern-free hook: a cream arc with a red dashed arc on top (SVG <pattern> fills fail on some
-  // mobile engines, e.g. Samsung Internet, which left only the straight stick visible)
-  const HOOK = '<svg class="hook" viewBox="0 -5 26 29" aria-hidden="true">'
-    + '<path d="M20 24V11.5A7.5 7.5 0 0 0 5 11.5V15" fill="none" stroke="#fbf6ee" stroke-width="9" stroke-linecap="round"/>'
-    + '<path d="M20 24V11.5A7.5 7.5 0 0 0 5 11.5V15" fill="none" stroke="#c8202c" stroke-width="9" stroke-dasharray="5 6" stroke-dashoffset="2"/>'
-    + '<path d="M23.2 24V11.5" stroke="rgba(0,0,0,.2)" stroke-width="2"/></svg>';
+  // one continuous cane: hook + stick are a single SVG path, so the stripes run unbroken around the
+  // bend and there is no seam. Cream arc under a red dashed arc (no <pattern>: fails on Samsung Internet).
+  function caneSvg(total){
+    const h = Math.max(total, 40), d = `M20 ${h - 4.5}V11.5A7.5 7.5 0 0 0 5 11.5V15`;
+    return '<svg class="hook" viewBox="0 -5 26 ' + h + '" width="26" height="' + (h + 5) + '" aria-hidden="true">'
+      + '<path d="' + d + '" fill="none" stroke="#fbf6ee" stroke-width="9" stroke-linecap="round"/>'
+      + '<path d="' + d + '" fill="none" stroke="#c8202c" stroke-width="9" stroke-dasharray="6 7"/>'
+      + '<path d="M23.2 ' + (h - 4.5) + 'V11.5" stroke="rgba(0,0,0,.18)" stroke-width="2"/></svg>';
+  }
   function cane(el){
     if(el.dataset.cane) return; el.dataset.cane = '1';
     const wrap = document.createElement('div'); wrap.className = 'xm-canewrap';
     el.parentNode.insertBefore(wrap, el); wrap.appendChild(el);
     const track = document.createElement('div'); track.className = 'xm-track';
     const c = document.createElement('div'); c.className = 'xm-cane';
-    c.innerHTML = HOOK + '<span class="stick"></span>';
+    c.innerHTML = caneSvg(70);
     track.appendChild(c); wrap.appendChild(track);
-    const stick = c.querySelector('.stick');
+    let drawn = 0;
     let L = 0, H = 0;
     function sync(){
       const max = el.scrollHeight - el.clientHeight;
@@ -1771,7 +1774,7 @@ applyChrome(); renderGuide(); loadDash(); pollRun();
       track.style.height = (el.clientHeight - 20) + 'px';
       H = track.clientHeight;
       L = Math.max(70, Math.min(H, H * el.clientHeight / Math.max(el.scrollHeight, 1)));
-      stick.style.height = Math.max(L - 29, 26) + 'px';
+      const Li = Math.round(L); if(Li !== drawn){ drawn = Li; c.innerHTML = caneSvg(Li); }
       c.style.top = (max > 0 ? (H - L) * el.scrollTop / max : 0) + 'px';
     }
     el.addEventListener('scroll', sync, {passive:true});
