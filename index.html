@@ -1748,20 +1748,19 @@ applyChrome(); renderGuide(); loadDash(); pollRun();
   })();
 
   // ---- Brief viewer: candy cane (hook + diagonal-striped stick); drag / track-click / touch ----
+  // pattern-free hook: a cream arc with a red dashed arc on top (SVG <pattern> fills fail on some
+  // mobile engines, e.g. Samsung Internet, which left only the straight stick visible)
   const HOOK = '<svg class="hook" viewBox="0 -5 26 29" aria-hidden="true">'
-    + '<defs><pattern id="xmcs" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(-55)"><rect width="8" height="8" fill="#fbf6ee"/><rect width="4" height="8" fill="#c8202c"/></pattern></defs>'
-    + '<path d="M20 24V11.5A7.5 7.5 0 0 0 5 11.5V15" fill="none" stroke="url(#xmcs)" stroke-width="9" stroke-linecap="round"/>'
-    + '<path d="M20 24V11.5A7.5 7.5 0 0 0 5 11.5V15" fill="none" stroke="rgba(0,0,0,.18)" stroke-width="9" stroke-linecap="round" stroke-dasharray="0 1000" />'
+    + '<path d="M20 24V11.5A7.5 7.5 0 0 0 5 11.5V15" fill="none" stroke="#fbf6ee" stroke-width="9" stroke-linecap="round"/>'
+    + '<path d="M20 24V11.5A7.5 7.5 0 0 0 5 11.5V15" fill="none" stroke="#c8202c" stroke-width="9" stroke-dasharray="5 6" stroke-dashoffset="2"/>'
     + '<path d="M23.2 24V11.5" stroke="rgba(0,0,0,.2)" stroke-width="2"/></svg>';
-  let caneSeq = 0;
   function cane(el){
     if(el.dataset.cane) return; el.dataset.cane = '1';
     const wrap = document.createElement('div'); wrap.className = 'xm-canewrap';
     el.parentNode.insertBefore(wrap, el); wrap.appendChild(el);
     const track = document.createElement('div'); track.className = 'xm-track';
     const c = document.createElement('div'); c.className = 'xm-cane';
-    const pid = 'xmcs' + (++caneSeq);
-    c.innerHTML = HOOK.split('xmcs').join(pid) + '<span class="stick"></span>';
+    c.innerHTML = HOOK + '<span class="stick"></span>';
     track.appendChild(c); wrap.appendChild(track);
     const stick = c.querySelector('.stick');
     let L = 0, H = 0;
