@@ -105,6 +105,8 @@ html.xmas .replist::-webkit-scrollbar-thumb,html.xmas #runlog::-webkit-scrollbar
 html.xmas .xm-canewrap{position:relative}
 html.xmas .xm-canewrap>.repview{scrollbar-width:none;padding-right:44px}
 html.xmas .xm-canewrap>.repview::-webkit-scrollbar{display:none}
+/* cane strip pads the right side only: pull figures back so the photo centres on the visible box */
+html.xmas .xm-canewrap>.repview figure.mdfig{margin-right:-16px}
 html.xmas .xm-track{position:absolute;top:10px;right:6px;width:26px;border-radius:13px;background:linear-gradient(90deg,transparent 11px,rgba(220,184,113,.16) 11px, rgba(220,184,113,.16) 15px,transparent 15px);touch-action:none;cursor:pointer}
 html.xmas .xm-cane{position:absolute;right:0;width:26px;touch-action:none;cursor:grab;filter:drop-shadow(0 2px 3px rgba(0,0,0,.55))}
 html.xmas .xm-cane:active{cursor:grabbing}
@@ -118,6 +120,7 @@ html.xmas .xm-track.none{display:none}
   html.xmas .xm-badge{margin:6px 0 0;letter-spacing:.22em}
   html.xmas .xm-hdr-art{display:none}
   html.xmas .xm-canewrap>.repview{padding-right:36px}
+  html.xmas .xm-canewrap>.repview figure.mdfig{margin-right:-22px}
   html.xmas .xm-track{right:3px}
   html.xmas .xm-sleigh-track{width:24px}
   html.xmas .xm-sleigh,html.xmas .xm-sleigh svg{width:28px;height:90px}

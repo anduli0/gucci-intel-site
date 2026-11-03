@@ -216,8 +216,8 @@ table.gt th{background:var(--panel2);color:var(--gold);font-weight:500}
 .replist .tm{font-size:10.5px;color:var(--ink-dim);margin-top:2px}
 .repview{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:24px 28px;overflow-y:auto;overflow-x:hidden;max-height:72vh;line-height:1.95;font-size:13.5px;font-weight:380;overflow-wrap:anywhere}
 .repview .tblwrap{overflow-x:auto;max-width:100%;touch-action:auto}
-.repview figure.mdfig{margin:18px 0 22px;padding:0;text-align:center}
-.repview figure.mdfig img{max-width:100%;max-height:520px;border-radius:8px;border:1px solid var(--line);display:inline-block}
+.repview figure.mdfig{margin:18px 0 22px;padding:0;text-align:center;display:flex;flex-direction:column;align-items:center;max-width:100%;box-sizing:border-box}
+.repview figure.mdfig img{width:auto;height:auto;max-width:100%;max-height:520px;object-fit:contain;border-radius:8px;border:1px solid var(--line);display:block;margin:0 auto}
 .repview figure.mdfig figcaption{font-size:12px;color:var(--ink-dim);margin-top:8px;line-height:1.6}
 .repview figure.mdfig .credit{display:block;font-size:11px;color:var(--gold-dim);letter-spacing:.04em}
 .repview figure.mdfig .credit a{color:var(--gold-dim)}
@@ -266,6 +266,7 @@ body.ro .robadge{display:inline-block}
   .repview{max-height:80vh;scroll-margin-top:8px}
   .xm-canewrap{scroll-margin-top:8px}
   .repview{padding:16px 14px;font-size:13px;overflow-x:auto}
+  .repview figure.mdfig img{max-height:60vh}
   table.gt td,table.gt th{padding:5px 7px;font-size:11px}
   .calitem{flex-direction:column;gap:6px}
   .calitem .cd{min-width:0}
